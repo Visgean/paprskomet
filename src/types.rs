@@ -1,4 +1,4 @@
-
+use std::ops::{Add, Neg, Sub};
 
 #[derive(Debug)]
 struct Vector3D {
@@ -35,8 +35,63 @@ impl Vector3D {
             w: 0.0
         }
     }
+
 }
 
+impl PartialEq for Vector3D {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
+impl Add for Vector3D {
+    type Output = Vector3D;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        if self.w == 1.0 && rhs.w == 1.0 {
+            panic!("Cant add point to point!")
+        }
+
+        Vector3D::new(
+            self.x + rhs.x,
+            self.y + rhs.y,
+            self.z + rhs.z,
+            self.w + rhs.w
+        )
+    }
+}
+
+impl Sub for Vector3D {
+    type Output = Vector3D;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        if self.w == 1.0 && rhs.w == 1.0 {
+            panic!("Cant add point to point!")
+        }
+
+        Vector3D::new(
+            self.x - rhs.x,
+            self.y - rhs.y,
+            self.z - rhs.z,
+            self.w - rhs.w
+        )
+    }
+}
+
+
+
+impl Neg for Vector3D {
+    type Output = Vector3D;
+
+    fn neg(self) -> Self::Output {
+        Vector3D::new(
+            -self.x,
+            -self.y,
+            -self.z,
+            self.w
+        )
+    }
+}
 
 
 #[cfg(test)]
@@ -49,4 +104,63 @@ mod tests {
         assert_eq!(point.x, 1.0);
         assert_eq!(point.w, 1.0);
     }
+
+    #[test]
+    fn test_compare() {
+        let point_a = Vector3D::point(1.0, 2.0, 3.0);
+        let point_b = Vector3D::point(1.0, 2.0, 3.0);
+        assert_eq!(point_a, point_b);
+    }
+
+    #[test]
+    fn test_add_vectors() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_b = Vector3D::vector(2.0, 3.0, 5.0);
+
+        let vector_sum = Vector3D::vector(3.0, 5.0, 8.0);
+
+        assert_eq!(vector_a + vector_b, vector_sum);
+    }
+
+    #[test]
+    fn test_add_vector_point() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_b = Vector3D::point(2.0, 3.0, 5.0);
+
+        let vector_sum = Vector3D::point(3.0, 5.0, 8.0);
+
+        assert_eq!(vector_a + vector_b, vector_sum);
+    }
+
+
+    #[test]
+    #[should_panic]
+    fn test_add_point_point() {
+        let point_a = Vector3D::point(1.0, 2.0, 3.0);
+        let point_b = Vector3D::point(2.0, 3.0, 5.0);
+
+        let point_sum = Vector3D::point(3.0, 5.0, 8.0);
+
+        assert_eq!(point_a + point_b, point_sum);
+    }
+
+
+    #[test]
+    fn test_subtract_vectors() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_b = Vector3D::vector(2.0, 3.0, 5.0);
+
+        let vector_sum = Vector3D::vector(-1.0, -1.0, -2.0);
+
+        assert_eq!(vector_a - vector_b, vector_sum);
+    }
+
+    #[test]
+    fn test_neg_ident() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let neg = Vector3D::vector(-1.0, -2.0, -3.0);
+
+        assert_eq!(-vector_a, neg);
+    }
+
 }
