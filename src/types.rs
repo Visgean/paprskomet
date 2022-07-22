@@ -1,6 +1,6 @@
-use std::ops::{Add, Neg, Sub};
+use std::ops::{Add, Neg, Sub, Mul};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 struct Vector3D {
     x: f32,
     y: f32,
@@ -94,6 +94,43 @@ impl Neg for Vector3D {
 }
 
 
+impl Mul<Vector3D> for f32 {
+    type Output = Vector3D;
+
+    fn mul(self, rhs: Vector3D) -> Self::Output {
+        if rhs.w == 1.0 {
+            panic!("Cant use scalar multiplication on a point!!")
+        }
+
+        Vector3D::new(
+            self * rhs.x,
+            self * rhs.y,
+            self * rhs.z,
+            rhs.w
+        )
+    }
+}
+
+
+impl Mul<f32> for Vector3D {
+    type Output = Vector3D;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        if self.w == 1.0 {
+            panic!("Cant use scalar multiplication on a point!!")
+        }
+
+        Vector3D::new(
+            self.x * rhs,
+            self.y * rhs,
+            self.z * rhs,
+            self.w
+        )
+    }
+}
+
+
+
 #[cfg(test)]
 mod tests {
     use crate::types::Vector3D;
@@ -162,5 +199,38 @@ mod tests {
 
         assert_eq!(-vector_a, neg);
     }
+
+    #[test]
+    fn test_zero() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let zero = Vector3D::vector(0.0,0.0,0.0);
+
+        assert_eq!(-vector_a + vector_a, zero);
+        assert_eq!(vector_a - vector_a, zero);
+    }
+
+
+
+    #[test]
+    fn test_scalar_multiplication() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let result = Vector3D::vector(3.0, 6.0, 9.0);
+
+        assert_eq!(3.0 * vector_a, result);
+        assert_eq!(vector_a * 3.0, result);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_scalar_point_mul() {
+        let _point_a = Vector3D::point(1.0, 2.0, 3.0) * 3.0;
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_scalar_point_mul_reverse() {
+        let _point_a = 3.0 * Vector3D::point(1.0, 2.0, 3.0);
+    }
+
 
 }
