@@ -1,4 +1,4 @@
-use std::ops::{Add, Neg, Sub, Mul};
+use std::ops::{Add, Neg, Sub, Mul, Div};
 
 #[derive(Debug, Clone, Copy)]
 struct Vector3D {
@@ -130,6 +130,22 @@ impl Mul<f32> for Vector3D {
 }
 
 
+impl Div<f32> for Vector3D {
+    type Output = Vector3D;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        if self.w == 1.0 {
+            panic!("Cant use scalar multiplication on a point!!")
+        }
+
+        Vector3D::new(
+            self.x / rhs,
+            self.y / rhs,
+            self.z / rhs,
+            self.w
+        )
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -232,5 +248,12 @@ mod tests {
         let _point_a = 3.0 * Vector3D::point(1.0, 2.0, 3.0);
     }
 
+    #[test]
+    fn test_scalar_div() {
+        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
+        let result = Vector3D::vector(1.0, 2.0, 3.0);
+
+        assert_eq!(vector_a / 3.0, result);
+    }
 
 }
