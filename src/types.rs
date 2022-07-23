@@ -36,6 +36,12 @@ impl Vector3D {
         }
     }
 
+    pub fn magnitude(&self) -> f32 {
+        (
+            self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
+        ).sqrt()
+    }
+
 }
 
 impl PartialEq for Vector3D {
@@ -254,6 +260,14 @@ mod tests {
         let result = Vector3D::vector(1.0, 2.0, 3.0);
 
         assert_eq!(vector_a / 3.0, result);
+    }
+
+
+    #[test]
+    fn test_magnitude() {
+        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
+
+        assert_eq!(vector_a.magnitude(), 11.224972);
     }
 
 }
