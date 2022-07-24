@@ -42,6 +42,17 @@ impl Vector3D {
         ).sqrt()
     }
 
+    pub fn normalize(&self) -> Self {
+        let m = self.magnitude();
+        Self {
+            x: self.x / m,
+            y: self.y / m,
+            z: self.z / m,
+            w: self.w
+        }
+    }
+
+
 }
 
 impl PartialEq for Vector3D {
@@ -269,5 +280,12 @@ mod tests {
 
         assert_eq!(vector_a.magnitude(), 11.224972);
     }
+
+    #[test]
+    fn test_normalization() {
+        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
+        assert_eq!(vector_a.normalize().magnitude(), 1.0);
+    }
+
 
 }
