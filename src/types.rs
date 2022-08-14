@@ -52,6 +52,30 @@ impl Vector3D {
         }
     }
 
+    pub fn dot(&self, rhs: &Self) -> f32 {
+        if self.w == 1.0 || rhs.w == 1.0 {
+            panic!("Cant dot point to point!")
+        }
+
+        self.x * rhs.x +
+        self.y * rhs.y +
+        self.z * rhs.z +
+        self.w * rhs.w
+    }
+
+    fn cross(&self, rhs: &Self) -> Self {
+        if self.w == 1.0 && rhs.w == 1.0 {
+            panic!("Cant add point to point!")
+        }
+
+        Vector3D::new(
+            self.y * rhs.z - self.z * rhs.y,
+            self.z * rhs.x - self.x * rhs.z,
+            self.x * rhs.y - self.y * rhs.x,
+            0.0
+        )
+    }
+
 
 }
 
@@ -287,5 +311,20 @@ mod tests {
         assert_eq!(vector_a.normalize().magnitude(), 1.0);
     }
 
+
+    #[test]
+    fn test_dot() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_b = Vector3D::vector(2.0, 3.0, 4.0);
+        assert_eq!(vector_a.dot(&vector_b), 20.0);
+    }
+
+    #[test]
+    fn test_cross() {
+        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_b = Vector3D::vector(2.0, 3.0, 4.0);
+        let vector_c = Vector3D::vector(-1.0, 2.0, -1.0);
+        assert_eq!(vector_a.cross(&vector_b), vector_c);
+    }
 
 }
