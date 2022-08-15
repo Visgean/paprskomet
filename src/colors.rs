@@ -70,19 +70,6 @@ impl Sub for Color {
 
 
 
-impl Neg for Color {
-    type Output = Color;
-
-    fn neg(self) -> Self::Output {
-        Color::new(
-            -self.r,
-            -self.g,
-            -self.b
-        )
-    }
-}
-
-
 impl Mul<Color> for f32 {
     type Output = Color;
 
@@ -121,6 +108,19 @@ impl Div<f32> for Color {
     }
 }
 
+impl Mul<Color> for Color {
+    type Output = Color;
+
+    fn mul(self, rhs: Color) -> Self::Output {
+        Color::new(
+            self.r * rhs.r,
+            self.g * rhs.g,
+            self.b * rhs.b,
+        )
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
     use crate::colors::Color;
@@ -152,71 +152,66 @@ mod tests {
 
     #[test]
     fn test_subtract_vectors() {
-        let vector_a = Color::new(1.0, 2.0, 3.0);
-        let vector_b = Color::new(2.0, 3.0, 5.0);
+        let color_a = Color::new(1.0, 2.0, 3.0);
+        let color_b = Color::new(2.0, 3.0, 5.0);
 
-        let vector_sum = Color::new(-1.0, -1.0, -2.0);
+        let color_sum = Color::new(-1.0, -1.0, -2.0);
 
-        assert_eq!(vector_a - vector_b, vector_sum);
+        assert_eq!(color_a - color_b, color_sum);
     }
-
-    #[test]
-    fn test_neg_ident() {
-        let vector_a = Color::new(1.0, 2.0, 3.0);
-        let neg = Color::new(-1.0, -2.0, -3.0);
-
-        assert_eq!(-vector_a, neg);
-    }
-
-    #[test]
-    fn test_zero() {
-        let vector_a = Color::new(1.0, 2.0, 3.0);
-        let zero = Color::new(0.0,0.0,0.0);
-
-        assert_eq!(-vector_a + vector_a, zero);
-        assert_eq!(vector_a - vector_a, zero);
-    }
-
 
 
     #[test]
     fn test_scalar_multiplication() {
-        let vector_a = Color::new(1.0, 2.0, 3.0);
+        let color_a = Color::new(1.0, 2.0, 3.0);
         let result = Color::new(3.0, 6.0, 9.0);
 
-        assert_eq!(3.0 * vector_a, result);
-        assert_eq!(vector_a * 3.0, result);
+        assert_eq!(3.0 * color_a, result);
+        assert_eq!(color_a * 3.0, result);
     }
 
 
     #[test]
     fn test_scalar_div() {
-        let vector_a = Color::new(3.0, 6.0, 9.0);
+        let color_a = Color::new(3.0, 6.0, 9.0);
         let result = Color::new(1.0, 2.0, 3.0);
 
-        assert_eq!(vector_a / 3.0, result);
+        assert_eq!(color_a / 3.0, result);
     }
 
 
     #[test]
     fn test_magnitude() {
-        let vector_a = Color::new(3.0, 6.0, 9.0);
+        let color_a = Color::new(3.0, 6.0, 9.0);
 
-        assert_eq!(vector_a.magnitude(), 11.224972);
+        assert_eq!(color_a.magnitude(), 11.224972);
     }
 
     #[test]
     fn test_normalization() {
-        let vector_a = Color::new(3.0, 6.0, 9.0);
-        assert_eq!(vector_a.normalize().magnitude(), 1.0);
+        let color_a = Color::new(3.0, 6.0, 9.0);
+        assert_eq!(color_a.normalize().magnitude(), 1.0);
     }
 
 
     #[test]
     fn test_dot() {
-        let vector_a = Color::new(1.0, 2.0, 3.0);
-        let vector_b = Color::new(2.0, 3.0, 4.0);
-        assert_eq!(vector_a.dot(&vector_b), 20.0);
+        let color_a = Color::new(1.0, 2.0, 3.0);
+        let color_b = Color::new(2.0, 3.0, 4.0);
+        assert_eq!(color_a.dot(&color_b), 20.0);
     }
+
+    #[test]
+    fn test_color_product() {
+        let color_a = Color::new(1.0, 0.2, 1.0);
+        let color_b = Color::new(0.9, 1.0, 2.0);
+
+        let color_c = Color::new(0.9, 0.2, 2.0);
+
+        assert_eq!(color_a * color_b, color_c);
+    }
+
+
+
 
 }
