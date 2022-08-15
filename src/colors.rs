@@ -129,7 +129,7 @@ mod tests {
     fn test_colors() {
         let color = Color::new(1.0, 2.0, 3.0);
         assert_eq!(color.r, 1.0);
-        assert_eq!(color.b, 2.0);
+        assert_eq!(color.b, 3.0);
     }
 
     #[test]
