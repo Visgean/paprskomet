@@ -190,7 +190,7 @@ impl Div<f32> for Vector3D {
 
 #[cfg(test)]
 mod tests {
-    use crate::vectors::Vector3D;
+    use crate::canvas::vectors::Vector3D;
 
     #[test]
     fn test_point() {

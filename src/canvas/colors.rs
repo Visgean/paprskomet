@@ -1,10 +1,23 @@
-use std::ops::{Add, Neg, Sub, Mul, Div};
+use std::fmt::format;
+use std::ops::{Add, Sub, Mul, Div};
 
 #[derive(Debug, Clone, Copy)]
-struct Color {
+pub struct Color {
     r: f32,
     g: f32,
     b: f32,
+}
+
+
+fn f_pixel(n: f32) -> usize{
+    // we store pixels in f32 but for ppm format we need them as integers..
+    let x = n * 255.0;
+    let mut int_x = x as usize;
+
+    if (int_x > 255) {
+        int_x = 255
+    }
+    int_x
 }
 
 
@@ -12,6 +25,20 @@ impl Color {
     pub fn new (r: f32, g: f32, b: f32) -> Self {
         Self {r, g, b}
     }
+
+    pub fn black() -> Self {
+        Self {r:0.0, g:0.0, b:0.0}
+    }
+
+    pub fn red() -> Self {
+        Self {r:1.0, g:0.0, b:0.0}
+    }
+
+    pub fn to_str(&self) -> String {
+        format!("{} {} {}\n", f_pixel(self.r), f_pixel(self.g), f_pixel(self.b))
+    }
+
+
 
     pub fn magnitude(&self) -> f32 {
         (
@@ -33,10 +60,9 @@ impl Color {
         self.g * rhs.g +
         self.b * rhs.b
     }
-
-
-
 }
+
+
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
@@ -123,7 +149,7 @@ impl Mul<Color> for Color {
 
 #[cfg(test)]
 mod tests {
-    use crate::colors::Color;
+    use crate::canvas::colors::Color;
 
     #[test]
     fn test_colors() {
