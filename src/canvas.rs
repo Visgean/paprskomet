@@ -46,7 +46,7 @@ impl Canvas {
 
         let string_value = pixel_array.join("\n");
 
-        format!("{} \n{}", header, string_value)
+        format!("{} \n{}\n", header, string_value)
     }
 
     pub fn write_ppm(&self, filename: &str) {
