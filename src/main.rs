@@ -1,6 +1,7 @@
 extern crate core;
 
-mod types;
+mod vectors;
+mod colors;
 
 fn main() {
     println!("Hello, world!");
