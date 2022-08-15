@@ -149,7 +149,7 @@ impl Mul<Color> for Color {
 
 #[cfg(test)]
 mod tests {
-    use crate::canvas::colors::Color;
+    use crate::colors::Color;
 
     #[test]
     fn test_colors() {

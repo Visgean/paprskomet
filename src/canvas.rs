@@ -1,12 +1,7 @@
 use std::fmt::format;
 
-use crate::canvas::colors::Color;
+use crate::colors::Color;
 use std::fs;
-
-pub mod vectors;
-pub mod colors;
-
-
 
 
 #[derive(Debug, Clone)]
@@ -14,7 +9,7 @@ pub struct Canvas {
     width: usize,
     height: usize,
 
-    pub pixels: Vec<Vec<Color>>
+    pixels: Vec<Vec<Color>>
 }
 
 impl Canvas {
@@ -25,6 +20,22 @@ impl Canvas {
             pixels: vec![vec![Color::black(); width]; height],
         }
     }
+
+    pub fn write(&mut self, x: usize, y: usize, color: Color) {
+        // so the problem with just writing to canvas is that it will be rendered from upper left..
+        // we could change the .to_ppm method to render it upside down sort of, but it makes more
+        // sense to hide the vector implementation...
+
+        if x > self.width || y > self.height {
+            // i could panick but why? lets just silently ignore this!
+            return
+            // panic!("Out of bounds write to canvas!")
+        }
+
+        let row = self.height - y - 1;
+        self.pixels[row][x] = color;
+    }
+
 
     pub fn to_ppm(&self) -> String {
         let header = format!("P3\n{} {}\n255", self.width, self.height);
@@ -50,7 +61,7 @@ impl Canvas {
 #[cfg(test)]
 mod tests {
     use crate::canvas::Canvas;
-    use crate::canvas::colors::Color;
+    use crate::colors::Color;
 
     #[test]
     fn test_canvas() {

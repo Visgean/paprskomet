@@ -1,11 +1,11 @@
 use std::ops::{Add, Neg, Sub, Mul, Div};
 
 #[derive(Debug, Clone, Copy)]
-struct Vector3D {
-    x: f32,
-    y: f32,
-    z: f32,
-    w: f32
+pub struct Vector3D {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub w: f32
 }
 
 
@@ -190,7 +190,7 @@ impl Div<f32> for Vector3D {
 
 #[cfg(test)]
 mod tests {
-    use crate::canvas::vectors::Vector3D;
+    use crate::vectors::Vector3D;
 
     #[test]
     fn test_point() {
