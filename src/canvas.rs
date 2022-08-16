@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use crate::colors::Color;
 use std::fs;
 

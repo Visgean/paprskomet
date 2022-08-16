@@ -1,6 +1,26 @@
-
 use crate::vectors::Vector3D;
-use crate::canvas;
+
+use crate::canvas::Canvas;
+use crate::colors::Color;
+
+
+pub fn write_projectile_image() {
+    let mut canvas = Canvas::new(1200, 800);
+
+    let projectile_log = projectile(1200.0);
+
+    for pos in projectile_log {
+        let x = pos.x as usize;
+        let y = pos.y as usize;
+
+        // canvas.pixels[y][x] = Color::red();
+        canvas.write(x, y, Color::red())
+    }
+
+    canvas.write_ppm("./image.ppm");
+
+}
+
 
 pub fn projectile(max_x: f32) -> Vec<Vector3D> {
     let gravity = Vector3D::vector(0.0, -0.587, 0.0);

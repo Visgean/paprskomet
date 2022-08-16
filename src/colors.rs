@@ -1,4 +1,3 @@
-use std::fmt::format;
 use std::ops::{Add, Sub, Mul, Div};
 
 #[derive(Debug, Clone, Copy)]
@@ -14,7 +13,7 @@ fn f_pixel(n: f32) -> usize{
     let x = n * 255.0;
     let mut int_x = x as usize;
 
-    if (int_x > 255) {
+    if int_x > 255 {
         int_x = 255
     }
     int_x
