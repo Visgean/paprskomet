@@ -1,38 +1,39 @@
 use std::ops::{Add, Neg, Sub, Mul, Div};
+use crate::utils::float_compare;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3D {
     pub x: f32,
     pub y: f32,
     pub z: f32,
-    pub w: f32
+    pub w: f32,
 }
 
 
 impl Vector3D {
-    pub fn new (x: f32, y: f32, z: f32, w: f32) -> Self {
+    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
         Self {
             x: x,
             y: y,
             z: z,
-            w: w
+            w: w,
         }
     }
 
-    pub fn point (x: f32, y: f32, z: f32) -> Self {
+    pub fn point(x: f32, y: f32, z: f32) -> Self {
         Self {
             x: x,
             y: y,
             z: z,
-            w: 1.0
+            w: 1.0,
         }
     }
-    pub fn vector (x: f32, y: f32, z: f32) -> Self {
+    pub fn vector(x: f32, y: f32, z: f32) -> Self {
         Self {
             x: x,
             y: y,
             z: z,
-            w: 0.0
+            w: 0.0,
         }
     }
 
@@ -48,7 +49,7 @@ impl Vector3D {
             x: self.x / m,
             y: self.y / m,
             z: self.z / m,
-            w: self.w
+            w: self.w,
         }
     }
 
@@ -58,9 +59,9 @@ impl Vector3D {
         }
 
         self.x * rhs.x +
-        self.y * rhs.y +
-        self.z * rhs.z +
-        self.w * rhs.w
+            self.y * rhs.y +
+            self.z * rhs.z +
+            self.w * rhs.w
     }
 
     fn cross(&self, rhs: &Self) -> Self {
@@ -72,16 +73,17 @@ impl Vector3D {
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
             self.x * rhs.y - self.y * rhs.x,
-            0.0
+            0.0,
         )
     }
-
-
 }
 
 impl PartialEq for Vector3D {
     fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+        float_compare(self.x ,other.x) &&
+        float_compare(self.y ,other.y) &&
+        float_compare(self.z ,other.z) &&
+        float_compare(self.w ,other.w)
     }
 }
 
@@ -97,7 +99,7 @@ impl Add for Vector3D {
             self.x + rhs.x,
             self.y + rhs.y,
             self.z + rhs.z,
-            self.w + rhs.w
+            self.w + rhs.w,
         )
     }
 }
@@ -114,11 +116,10 @@ impl Sub for Vector3D {
             self.x - rhs.x,
             self.y - rhs.y,
             self.z - rhs.z,
-            self.w - rhs.w
+            self.w - rhs.w,
         )
     }
 }
-
 
 
 impl Neg for Vector3D {
@@ -129,7 +130,7 @@ impl Neg for Vector3D {
             -self.x,
             -self.y,
             -self.z,
-            self.w
+            self.w,
         )
     }
 }
@@ -147,7 +148,7 @@ impl Mul<Vector3D> for f32 {
             self * rhs.x,
             self * rhs.y,
             self * rhs.z,
-            rhs.w
+            rhs.w,
         )
     }
 }
@@ -165,7 +166,7 @@ impl Mul<f32> for Vector3D {
             self.x * rhs,
             self.y * rhs,
             self.z * rhs,
-            self.w
+            self.w,
         )
     }
 }
@@ -183,7 +184,7 @@ impl Div<f32> for Vector3D {
             self.x / rhs,
             self.y / rhs,
             self.z / rhs,
-            self.w
+            self.w,
         )
     }
 }
@@ -261,12 +262,11 @@ mod tests {
     #[test]
     fn test_zero() {
         let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let zero = Vector3D::vector(0.0,0.0,0.0);
+        let zero = Vector3D::vector(0.0, 0.0, 0.0);
 
         assert_eq!(-vector_a + vector_a, zero);
         assert_eq!(vector_a - vector_a, zero);
     }
-
 
 
     #[test]
@@ -327,5 +327,4 @@ mod tests {
         let vector_c = Vector3D::vector(-1.0, 2.0, -1.0);
         assert_eq!(vector_a.cross(&vector_b), vector_c);
     }
-
 }

@@ -18,7 +18,6 @@ pub fn write_projectile_image() {
     }
 
     canvas.write_ppm("./image.ppm");
-
 }
 
 
@@ -27,7 +26,7 @@ pub fn projectile(max_x: f32) -> Vec<Vector3D> {
     let wind = Vector3D::vector(-0.03, 0.0, 0.0);
     let mut position = Vector3D::point(0.0, 1.0, 0.0);
 
-    let mut velocity = Vector3D::vector(1.0, 1.8, 0.0, ).normalize() * 30.0;
+    let mut velocity = Vector3D::vector(1.0, 1.8, 0.0).normalize() * 30.0;
 
 
     let mut position_log: Vec<Vector3D> = vec![];

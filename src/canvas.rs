@@ -7,7 +7,7 @@ pub struct Canvas {
     width: usize,
     height: usize,
 
-    pixels: Vec<Vec<Color>>
+    pixels: Vec<Vec<Color>>,
 }
 
 impl Canvas {
@@ -26,7 +26,7 @@ impl Canvas {
 
         if x > self.width || y > self.height {
             // i could panick but why? lets just silently ignore this!
-            return
+            return;
             // panic!("Out of bounds write to canvas!")
         }
 
@@ -49,11 +49,8 @@ impl Canvas {
 
     pub fn write_ppm(&self, filename: &str) {
         fs::write(filename, self.to_ppm()).expect("Unable to write file");
-
     }
-
 }
-
 
 
 #[cfg(test)]
@@ -84,7 +81,5 @@ mod tests {
     //
     //     assert_eq!("potato", canvas.to_ppm())
     // }
-
-
 }
 
