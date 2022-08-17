@@ -3,6 +3,7 @@ use crate::utils::float_compare;
 use std::iter::zip;
 
 use std::ops::{Mul};
+use crate::vectors::Vector3D;
 
 #[derive(Debug)]
 struct M {
@@ -50,7 +51,7 @@ impl M {
         M {
             data: vec![vec![0.0; n]; m],
             columns: n,
-            rows: n,
+            rows: m,
         }
     }
 
@@ -94,7 +95,7 @@ impl M {
         Ok(self.data[i][j])
     }
 
-    pub fn set(&mut self, i: usize, j: usize, x: f32){
+    pub fn set(&mut self, i: usize, j: usize, x: f32) {
         self.data[i][j] = x;
     }
 }
@@ -113,6 +114,9 @@ impl PartialEq for M {
     }
 }
 
+fn dot_p(v1: &Vec<f32>, v2: &Vec<f32>) -> f32 {
+    zip(v1, v2).map(|(x, y)| x * y).sum()
+}
 
 impl Mul<M> for M {
     type Output = M;
@@ -125,27 +129,42 @@ impl Mul<M> for M {
 
         for row in 0..rows {
             let row_vector = self.row(row);
-            
+
             for col in 0..columns {
                 let x = dot_p(&row_vector, &rhs.column(col));
                 result.set(row, col, x);
             }
         }
-
-
         result
-
     }
 }
 
-fn dot_p(v1: &Vec<f32>, v2: &Vec<f32>) -> f32 {
-    zip(v1, v2).map(|(x, y) | x * y).sum()
+
+
+impl Mul<Vector3D> for M {
+    type Output = M;
+
+    fn mul(self, rhs: Vector3D) -> Self::Output {
+        // convert vector to one column matrix..
+
+        let m_v = M::new(
+            vec![
+                vec![rhs.x],
+                vec![rhs.y],
+                vec![rhs.z],
+                vec![rhs.w],
+            ]
+        ).unwrap();
+
+        self * m_v
+    }
 }
 
 
 #[cfg(test)]
 mod tests {
     use crate::matrix::M;
+    use crate::vectors::Vector3D;
 
     #[test]
     fn test_matrix_4x4_init() {
@@ -253,6 +272,30 @@ mod tests {
         assert_eq!(m1 * m2, m3)
     }
 
+    #[test]
+    fn test_tuple_multiplication() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 3.0, 4.0],
+                vec![2.0, 4.0, 4.0, 2.0],
+                vec![8.0, 6.0, 4.0, 1.0],
+                vec![0.0, 0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+
+        let v1 = Vector3D::new(1.0, 2.0, 3.0, 1.0);
+
+        let m2 = M::new(
+            vec![
+                vec![18.0],
+                vec![24.0],
+                vec![33.0],
+                vec![1.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1 * v1, m2)
+    }
 
     #[test]
     fn test_ident() {
