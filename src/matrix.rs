@@ -97,6 +97,19 @@ impl M {
     pub fn set(&mut self, i: usize, j: usize, x: f32) {
         self.data[i][j] = x;
     }
+
+    pub fn transpose(&self) -> M {
+        let mut result = M::empty_matrix(self.rows, self.columns);
+
+        for i in 0..self.rows {
+            for j in 0..self.columns {
+                result.set(j, i, self.data[i][j])
+            }
+        }
+        result
+    }
+
+
 }
 
 
@@ -326,5 +339,28 @@ mod tests {
         assert_eq!(m2, m1)
     }
 
+    #[test]
+    fn test_transpose() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 3.0, 4.0],
+                vec![2.0, 4.0, 4.0, 2.0],
+                vec![8.0, 6.0, 4.0, 1.0],
+                vec![0.0, 0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
 
+         let m1_t = M::new(
+            vec![
+                vec![1.0, 2.0, 8.0, 0.0],
+                vec![2.0, 4.0, 6.0, 0.0],
+                vec![3.0, 4.0, 4.0, 0.0],
+                vec![4.0, 2.0, 1.0, 1.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.transpose(), m1_t);
+
+
+    }
 }
