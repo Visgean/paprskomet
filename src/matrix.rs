@@ -123,7 +123,6 @@ impl Mul<M> for M {
 
         let mut result = M::empty_matrix(rows, columns);
 
-
         for row in 0..rows {
             let row_vector = self.row(row);
             
