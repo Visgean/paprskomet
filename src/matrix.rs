@@ -140,7 +140,6 @@ impl Mul<M> for M {
 }
 
 
-
 impl Mul<Vector3D> for M {
     type Output = M;
 
