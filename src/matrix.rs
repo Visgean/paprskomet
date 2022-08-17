@@ -245,7 +245,6 @@ mod tests {
             ]
         ).unwrap();
 
-
         assert_eq!(m1, m2);
         assert_ne!(m1, m3);
     }
