@@ -1,11 +1,10 @@
-use std::io::empty;
 use crate::utils::float_compare;
 use std::iter::zip;
 
 use std::ops::{Mul};
 use crate::vectors::Vector3D;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct M {
     data: Vec<Vec<f32>>,
     pub rows: usize,
@@ -234,8 +233,8 @@ mod tests {
         ).unwrap();
 
 
-        assert!(m1 == m2);
-        assert!(m1 != m3);
+        assert_eq!(m1, m2);
+        assert_ne!(m1, m3);
     }
 
 
@@ -310,4 +309,22 @@ mod tests {
 
         assert_eq!(m1, M::ident(4));
     }
+
+    #[test]
+    fn test_ident_multiplication() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 3.0, 4.0],
+                vec![5.0, 6.0, 7.0, 8.0],
+                vec![9.0, 8.0, 7.0, 6.0],
+                vec![5.0, 4.0, 3.0, 2.0],
+            ]
+        ).unwrap();
+
+        let m2 = m1.clone() * M::ident(4);
+
+        assert_eq!(m2, m1)
+    }
+
+
 }

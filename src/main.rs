@@ -1,7 +1,5 @@
 extern crate core;
 
-use std::path::Display;
-
 mod canvas;
 mod projectile;
 pub mod vectors;
