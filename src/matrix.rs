@@ -127,7 +127,7 @@ impl Mul<M> for M {
             let row_vector = self.row(row);
             
             for col in 0..columns {
-                let x = dot_p(&row_vector, rhs.column(col));
+                let x = dot_p(&row_vector, &rhs.column(col));
                 result.set(row, col, x);
             }
         }
@@ -138,7 +138,7 @@ impl Mul<M> for M {
     }
 }
 
-fn dot_p(v1: &Vec<f32>, v2: Vec<f32>) -> f32 {
+fn dot_p(v1: &Vec<f32>, v2: &Vec<f32>) -> f32 {
     zip(v1, v2).map(|(x, y) | x * y).sum()
 }
 
