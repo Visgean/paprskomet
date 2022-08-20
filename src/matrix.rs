@@ -87,11 +87,8 @@ impl M {
     }
 
 
-    pub fn get(&self, i: usize, j: usize) -> Result<f32, String> {
-        if self.columns - 1 < j || self.rows - 1 < i {
-            return Err("Illegal access".into());
-        }
-        Ok(self.data[i][j])
+    pub fn get(&self, i: usize, j: usize) -> f32 {
+        self.data[i][j]
     }
 
     pub fn set(&mut self, i: usize, j: usize, x: f32) {
@@ -113,11 +110,14 @@ impl M {
         // base case:
 
         if self.columns == 2 && self.rows == 2 {
-            return
-                self.get(0,0).unwrap() * self.get(1,1).unwrap() -
-                    self.get(0, 1).unwrap() * self.get(1,0).unwrap()
+            return self.get(0,0) * self.get(1,1) - self.get(0, 1) * self.get(1,0)
         }
-        panic!("only 2x2 matrices are supported for det right now");
+
+        let mut det = 0.0;
+        for j in 0..self.columns {
+            det += self.get(0, j) * self.cofactor(0, j);
+        }
+        det
     }
 
 
@@ -229,7 +229,7 @@ mod tests {
         ).unwrap();
         assert_eq!(m1.rows, 4);
         assert_eq!(m1.columns, 4);
-        assert_eq!(m1.get(1, 2).unwrap(), 7.5)
+        assert_eq!(m1.get(1, 2), 7.5)
     }
 
     #[test]
@@ -243,7 +243,7 @@ mod tests {
         ).unwrap();
         assert_eq!(m1.rows, 3);
         assert_eq!(m1.columns, 3);
-        assert_eq!(m1.get(1, 2).unwrap(), 7.5)
+        assert_eq!(m1.get(1, 2), 7.5)
     }
 
 
@@ -509,6 +509,45 @@ mod tests {
         assert_eq!(m1.minor(1, 0), 25.0);
         assert_eq!(m1.cofactor(1, 0), -25.0);
     }
+
+    #[test]
+    fn test_det_3x3() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 6.0],
+                vec![-5.0, 8.0, -4.0],
+                vec![2.0, 6.0, 4.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.cofactor(0, 0), 56.0);
+        assert_eq!(m1.cofactor(0, 1), 12.0);
+        assert_eq!(m1.cofactor(0, 2), -46.0);
+
+        assert_eq!(m1.det(), -196.0);
+    }
+
+    #[test]
+    fn test_det_4x4() {
+        let m1 = M::new(
+            vec![
+                vec![-2.0, -8.0, 3.0, 5.0],
+                vec![-3.0, 1.0, 7.0, 3.0],
+                vec![1.0, 2.0, -9.0, 6.0],
+                vec![-6.0, 7.0, 7.0, -9.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.cofactor(0, 0), 690.0);
+        assert_eq!(m1.cofactor(0, 1), 447.0);
+        assert_eq!(m1.cofactor(0, 2), 210.0);
+        assert_eq!(m1.cofactor(0, 3), 51.0);
+
+        assert_eq!(m1.det(), -4071.0);
+    }
+
+
+
 
 
 

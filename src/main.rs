@@ -1,4 +1,3 @@
-extern crate core;
 
 mod canvas;
 mod projectile;
