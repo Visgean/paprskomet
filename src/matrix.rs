@@ -117,9 +117,21 @@ impl M {
                 self.get(0,0).unwrap() * self.get(1,1).unwrap() -
                     self.get(0, 1).unwrap() * self.get(1,0).unwrap()
         }
-
-
         panic!("only 2x2 matrices are supported for det right now");
+    }
+
+
+    pub fn submatrix(&self, row: usize, col: usize) -> M{
+        let mut m = self.clone();
+
+        for i in 0..self.rows {
+            m.data[i].remove(col);
+        }
+
+        m.data.remove(row);
+        m.rows = m.rows - 1;
+        m.columns = m.columns - 1;
+        m
     }
 
 
@@ -388,9 +400,72 @@ mod tests {
         ).unwrap();
 
         assert_eq!(m1.det(), 17.0);
-
-
     }
+
+    #[test]
+    fn test_submatrix() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 3.0, 4.0],
+                vec![2.0, 4.0, 4.0, 2.0],
+                vec![8.0, 6.0, 4.0, 1.0],
+                vec![0.0, 0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+
+        let subm = M::new(
+            vec![
+                vec![4.0, 4.0, 2.0],
+                vec![6.0, 4.0, 1.0],
+                vec![0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.submatrix(0, 0), subm);
+    }
+
+    #[test]
+    fn test_submatrix_2() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 2.0, 3.0, 4.0],
+                vec![2.0, 4.0, 4.0, 2.0],
+                vec![8.0, 6.0, 4.0, 1.0],
+                vec![0.0, 0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+
+        let subm = M::new(
+            vec![
+                vec![1.0, 3.0, 4.0],
+                vec![8.0, 4.0, 1.0],
+                vec![0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+        assert_eq!(m1.submatrix(1, 1), subm);
+    }
+
+
+    #[test]
+    fn test_submatrix_3() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 3.0, 4.0],
+                vec![8.0, 4.0, 1.0],
+                vec![0.0, 0.0, 1.0],
+            ]
+        ).unwrap();
+
+        let subm = M::new(
+            vec![
+                vec![1.0, 4.0],
+                vec![0.0, 1.0],
+            ]
+        ).unwrap();
+        assert_eq!(m1.submatrix(1, 1), subm);
+    }
+
+
 
 
 }
