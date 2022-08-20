@@ -109,6 +109,21 @@ impl M {
         result
     }
 
+    pub fn det(&self) -> f32 {
+        // base case:
+
+        if self.columns == 2 && self.rows == 2 {
+            return
+                self.get(0,0).unwrap() * self.get(1,1).unwrap() -
+                    self.get(0, 1).unwrap() * self.get(1,0).unwrap()
+        }
+
+
+        panic!("only 2x2 matrices are supported for det right now");
+    }
+
+
+
 
 }
 
@@ -362,4 +377,20 @@ mod tests {
 
 
     }
+
+    #[test]
+    fn test_small_det() {
+        let m1 = M::new(
+            vec![
+                vec![1.0, 5.0],
+                vec![-3.0, 2.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.det(), 17.0);
+
+
+    }
+
+
 }
