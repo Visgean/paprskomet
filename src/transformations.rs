@@ -28,12 +28,32 @@ pub fn rotation_x(r: f64) -> M {
 }
 
 
+pub fn rotation_y(r: f64) -> M {
+    M::new(vec![
+        vec![r.cos(), 0.0, r.sin(), 0.0],
+        vec![0.0, 1.0, 0.0, 0.0],
+        vec![-r.sin(), 0.0, r.cos(), 0.0],
+        vec![0.0, 0.0, 0.0, 1.0],
+    ]).unwrap()
+}
+
+
+pub fn rotation_z(r: f64) -> M {
+    M::new(vec![
+        vec![r.cos(), -r.sin(), 0.0 , 0.0],
+        vec![r.sin(), r.cos(), 0.0, 0.0],
+        vec![0.0, 0.0, 1.0, 0.0],
+        vec![0.0, 0.0, 0.0, 1.0],
+    ]).unwrap()
+}
+
+
 
 
 #[cfg(test)]
 mod tests {
     use std::f64::consts::PI;
-    use crate::transformations::{scaling, translation, rotation_x};
+    use crate::transformations::{scaling, translation, rotation_x, rotation_y, rotation_z};
 
     use crate::vectors::Tuple;
 
@@ -149,6 +169,48 @@ mod tests {
         assert_eq!(
             half_q.inverse() * p,
             Tuple::point(0.0, sq2 / 2.0, -sq2 / 2.0)
+        );
+    }
+
+
+    #[test]
+    fn test_rotation_y() {
+        let p = Tuple::point(0.0, 0.0, 1.0);
+
+        let half_q = rotation_y(PI / 4.0);
+        let full_q = rotation_y(PI / 2.0);
+
+        let sq2 = (2.0 as f64).sqrt();
+
+        assert_eq!(
+            half_q * p,
+            Tuple::point(sq2 / 2.0, 0.0, sq2 / 2.0)
+        );
+
+        assert_eq!(
+            full_q * p,
+            Tuple::point(1.0, 0.0, 0.0)
+        );
+    }
+
+
+    #[test]
+    fn test_rotation_z() {
+        let p = Tuple::point(0.0, 1.0, 0.0);
+
+        let half_q = rotation_z(PI / 4.0);
+        let full_q = rotation_z(PI / 2.0);
+
+        let sq2 = (2.0 as f64).sqrt();
+
+        assert_eq!(
+            half_q * p,
+            Tuple::point(-sq2 / 2.0, sq2 / 2.0, 0.0)
+        );
+
+        assert_eq!(
+            full_q * p,
+            Tuple::point(-1.0, 0.0, 0.0)
         );
     }
 }
