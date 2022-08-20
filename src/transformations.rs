@@ -18,10 +18,22 @@ pub fn scaling(x: f64, y: f64, z: f64) -> M {
     ]).unwrap()
 }
 
+pub fn rotation_x(r: f64) -> M {
+    M::new(vec![
+        vec![1.0, 0.0, 0.0, 0.0],
+        vec![0.0, r.cos(), -r.sin(), 0.0],
+        vec![0.0, r.sin(), r.cos(), 0.0],
+        vec![0.0, 0.0, 0.0, 1.0],
+    ]).unwrap()
+}
+
+
+
 
 #[cfg(test)]
 mod tests {
-    use crate::transformations::{scaling, translation};
+    use std::f64::consts::PI;
+    use crate::transformations::{scaling, translation, rotation_x};
 
     use crate::vectors::Tuple;
 
@@ -104,5 +116,39 @@ mod tests {
             scaling(-1.0, 1.0, 1.0) * v_a,
             v_b
         )
+    }
+
+
+    #[test]
+    fn test_rotation_x() {
+        let p = Tuple::point(0.0, 1.0, 0.0);
+
+        let half_q = rotation_x(PI / 4.0);
+        let full_q = rotation_x(PI / 2.0);
+
+        let sq2 = (2.0 as f64).sqrt();
+
+        assert_eq!(
+            half_q * p,
+            Tuple::point(0.0, sq2 / 2.0, sq2 / 2.0)
+        );
+
+        assert_eq!(
+            full_q * p,
+            Tuple::point(0.0, 0.0, 1.0)
+        );
+    }
+
+    #[test]
+    fn test_rotation_x_inv() {
+        let p = Tuple::point(0.0, 1.0, 0.0);
+
+        let half_q = rotation_x(PI / 4.0);
+        let sq2 = (2.0 as f64).sqrt();
+
+        assert_eq!(
+            half_q.inverse() * p,
+            Tuple::point(0.0, sq2 / 2.0, -sq2 / 2.0)
+        );
     }
 }
