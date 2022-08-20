@@ -2,14 +2,14 @@ use std::ops::{Add, Sub, Mul, Div};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
-    r: f32,
-    g: f32,
-    b: f32,
+    r: f64,
+    g: f64,
+    b: f64,
 }
 
 
-fn f_pixel(n: f32) -> usize{
-    // we store pixels in f32 but for ppm format we need them as integers..
+fn f_pixel(n: f64) -> usize{
+    // we store pixels in f64 but for ppm format we need them as integers..
     let x = n * 255.0;
     let mut int_x = x as usize;
 
@@ -21,7 +21,7 @@ fn f_pixel(n: f32) -> usize{
 
 
 impl Color {
-    pub fn new (r: f32, g: f32, b: f32) -> Self {
+    pub fn new (r: f64, g: f64, b: f64) -> Self {
         Self {r, g, b}
     }
 
@@ -39,7 +39,7 @@ impl Color {
 
 
 
-    pub fn magnitude(&self) -> f32 {
+    pub fn magnitude(&self) -> f64 {
         (
             self.r.powi(2) + self.g.powi(2) + self.b.powi(2)
         ).sqrt()
@@ -54,7 +54,7 @@ impl Color {
         }
     }
 
-    pub fn dot(&self, rhs: &Self) -> f32 {
+    pub fn dot(&self, rhs: &Self) -> f64 {
         self.r * rhs.r +
         self.g * rhs.g +
         self.b * rhs.b
@@ -95,7 +95,7 @@ impl Sub for Color {
 
 
 
-impl Mul<Color> for f32 {
+impl Mul<Color> for f64 {
     type Output = Color;
 
     fn mul(self, rhs: Color) -> Self::Output {
@@ -108,10 +108,10 @@ impl Mul<Color> for f32 {
 }
 
 
-impl Mul<f32> for Color {
+impl Mul<f64> for Color {
     type Output = Color;
 
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         Color::new(
             self.r * rhs,
             self.g * rhs,
@@ -121,10 +121,10 @@ impl Mul<f32> for Color {
 }
 
 
-impl Div<f32> for Color {
+impl Div<f64> for Color {
     type Output = Color;
 
-    fn div(self, rhs: f32) -> Self::Output {
+    fn div(self, rhs: f64) -> Self::Output {
         Color::new(
             self.r / rhs,
             self.g / rhs,
@@ -149,6 +149,7 @@ impl Mul<Color> for Color {
 #[cfg(test)]
 mod tests {
     use crate::colors::Color;
+    use crate::utils::float_compare;
 
     #[test]
     fn test_colors() {
@@ -208,8 +209,7 @@ mod tests {
     #[test]
     fn test_magnitude() {
         let color_a = Color::new(3.0, 6.0, 9.0);
-
-        assert_eq!(color_a.magnitude(), 11.224972);
+        assert!(float_compare(color_a.magnitude(), 11.224972));
     }
 
     #[test]

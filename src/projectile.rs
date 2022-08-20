@@ -21,7 +21,7 @@ pub fn write_projectile_image() {
 }
 
 
-pub fn projectile(max_x: f32) -> Vec<Vector3D> {
+pub fn projectile(max_x: f64) -> Vec<Vector3D> {
     let gravity = Vector3D::vector(0.0, -0.587, 0.0);
     let wind = Vector3D::vector(-0.03, 0.0, 0.0);
     let mut position = Vector3D::point(0.0, 1.0, 0.0);

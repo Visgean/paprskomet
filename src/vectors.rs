@@ -3,15 +3,15 @@ use crate::utils::float_compare;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3D {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-    pub w: f32,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+    pub w: f64,
 }
 
 
 impl Vector3D {
-    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
+    pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
         Self {
             x: x,
             y: y,
@@ -20,7 +20,7 @@ impl Vector3D {
         }
     }
 
-    pub fn point(x: f32, y: f32, z: f32) -> Self {
+    pub fn point(x: f64, y: f64, z: f64) -> Self {
         Self {
             x: x,
             y: y,
@@ -28,7 +28,7 @@ impl Vector3D {
             w: 1.0,
         }
     }
-    pub fn vector(x: f32, y: f32, z: f32) -> Self {
+    pub fn vector(x: f64, y: f64, z: f64) -> Self {
         Self {
             x: x,
             y: y,
@@ -37,7 +37,7 @@ impl Vector3D {
         }
     }
 
-    pub fn magnitude(&self) -> f32 {
+    pub fn magnitude(&self) -> f64 {
         (
             self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
         ).sqrt()
@@ -53,7 +53,7 @@ impl Vector3D {
         }
     }
 
-    pub fn dot(&self, rhs: &Self) -> f32 {
+    pub fn dot(&self, rhs: &Self) -> f64 {
         if self.w == 1.0 || rhs.w == 1.0 {
             panic!("Cant dot point to point!")
         }
@@ -136,7 +136,7 @@ impl Neg for Vector3D {
 }
 
 
-impl Mul<Vector3D> for f32 {
+impl Mul<Vector3D> for f64 {
     type Output = Vector3D;
 
     fn mul(self, rhs: Vector3D) -> Self::Output {
@@ -154,10 +154,10 @@ impl Mul<Vector3D> for f32 {
 }
 
 
-impl Mul<f32> for Vector3D {
+impl Mul<f64> for Vector3D {
     type Output = Vector3D;
 
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         if self.w == 1.0 {
             panic!("Cant use scalar multiplication on a point!!")
         }
@@ -172,10 +172,10 @@ impl Mul<f32> for Vector3D {
 }
 
 
-impl Div<f32> for Vector3D {
+impl Div<f64> for Vector3D {
     type Output = Vector3D;
 
-    fn div(self, rhs: f32) -> Self::Output {
+    fn div(self, rhs: f64) -> Self::Output {
         if self.w == 1.0 {
             panic!("Cant use scalar multiplication on a point!!")
         }
@@ -191,6 +191,7 @@ impl Div<f32> for Vector3D {
 
 #[cfg(test)]
 mod tests {
+    use crate::utils::float_compare;
     use crate::vectors::Vector3D;
 
     #[test]
@@ -303,7 +304,7 @@ mod tests {
     fn test_magnitude() {
         let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
 
-        assert_eq!(vector_a.magnitude(), 11.224972);
+        assert!(float_compare(vector_a.magnitude(), 11.224972));
     }
 
     #[test]

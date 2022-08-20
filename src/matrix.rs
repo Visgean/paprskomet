@@ -6,14 +6,14 @@ use crate::vectors::Vector3D;
 
 #[derive(Debug, Clone)]
 struct M {
-    data: Vec<Vec<f32>>,
+    data: Vec<Vec<f64>>,
     pub rows: usize,
     pub columns: usize,
 }
 
 
 impl M {
-    pub fn new(data: Vec<Vec<f32>>) -> Result<M, String> {
+    pub fn new(data: Vec<Vec<f64>>) -> Result<M, String> {
         // verify that every row has the same number of elements
         let rows = data.len();
 
@@ -72,7 +72,7 @@ impl M {
         }
     }
 
-    pub fn column(&self, n: usize) -> Vec<f32> {
+    pub fn column(&self, n: usize) -> Vec<f64> {
         let mut result = vec![0.0; self.rows];
 
         for i in 0..self.rows {
@@ -82,16 +82,16 @@ impl M {
         result
     }
 
-    pub fn row(&self, m: usize) -> Vec<f32> {
+    pub fn row(&self, m: usize) -> Vec<f64> {
         self.data[m].clone()
     }
 
 
-    pub fn get(&self, i: usize, j: usize) -> f32 {
+    pub fn get(&self, i: usize, j: usize) -> f64 {
         self.data[i][j]
     }
 
-    pub fn set(&mut self, i: usize, j: usize, x: f32) {
+    pub fn set(&mut self, i: usize, j: usize, x: f64) {
         self.data[i][j] = x;
     }
 
@@ -106,7 +106,7 @@ impl M {
         result
     }
 
-    pub fn det(&self) -> f32 {
+    pub fn det(&self) -> f64 {
         // base case:
 
         if self.columns == 2 && self.rows == 2 {
@@ -134,12 +134,12 @@ impl M {
         m
     }
 
-    pub fn minor(&self, row: usize, col: usize) -> f32{
+    pub fn minor(&self, row: usize, col: usize) -> f64{
         return self.submatrix(row, col).det();
     }
 
 
-    pub fn cofactor(&self, row: usize, col: usize) -> f32{
+    pub fn cofactor(&self, row: usize, col: usize) -> f64{
         let r  = self.minor(row, col);
 
         if (row + col) % 2 == 1 {
@@ -166,7 +166,7 @@ impl PartialEq for M {
     }
 }
 
-fn dot_p(v1: &Vec<f32>, v2: &Vec<f32>) -> f32 {
+fn dot_p(v1: &Vec<f64>, v2: &Vec<f64>) -> f64 {
     zip(v1, v2).map(|(x, y)| x * y).sum()
 }
 
@@ -545,10 +545,4 @@ mod tests {
 
         assert_eq!(m1.det(), -4071.0);
     }
-
-
-
-
-
-
 }
