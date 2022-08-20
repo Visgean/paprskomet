@@ -1,5 +1,5 @@
-use std::ops::{Add, Neg, Sub, Mul, Div};
 use crate::utils::float_compare;
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3D {
@@ -8,7 +8,6 @@ pub struct Vector3D {
     pub z: f64,
     pub w: f64,
 }
-
 
 impl Vector3D {
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
@@ -38,9 +37,7 @@ impl Vector3D {
     }
 
     pub fn magnitude(&self) -> f64 {
-        (
-            self.x.powi(2) + self.y.powi(2) + self.z.powi(2)
-        ).sqrt()
+        (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
     }
 
     pub fn normalize(&self) -> Self {
@@ -58,10 +55,7 @@ impl Vector3D {
             panic!("Cant dot point to point!")
         }
 
-        self.x * rhs.x +
-            self.y * rhs.y +
-            self.z * rhs.z +
-            self.w * rhs.w
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z + self.w * rhs.w
     }
 
     fn cross(&self, rhs: &Self) -> Self {
@@ -80,10 +74,10 @@ impl Vector3D {
 
 impl PartialEq for Vector3D {
     fn eq(&self, other: &Self) -> bool {
-        float_compare(self.x ,other.x) &&
-        float_compare(self.y ,other.y) &&
-        float_compare(self.z ,other.z) &&
-        float_compare(self.w ,other.w)
+        float_compare(self.x, other.x)
+            && float_compare(self.y, other.y)
+            && float_compare(self.z, other.z)
+            && float_compare(self.w, other.w)
     }
 }
 
@@ -121,20 +115,13 @@ impl Sub for Vector3D {
     }
 }
 
-
 impl Neg for Vector3D {
     type Output = Vector3D;
 
     fn neg(self) -> Self::Output {
-        Vector3D::new(
-            -self.x,
-            -self.y,
-            -self.z,
-            self.w,
-        )
+        Vector3D::new(-self.x, -self.y, -self.z, self.w)
     }
 }
-
 
 impl Mul<Vector3D> for f64 {
     type Output = Vector3D;
@@ -144,15 +131,9 @@ impl Mul<Vector3D> for f64 {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(
-            self * rhs.x,
-            self * rhs.y,
-            self * rhs.z,
-            rhs.w,
-        )
+        Vector3D::new(self * rhs.x, self * rhs.y, self * rhs.z, rhs.w)
     }
 }
-
 
 impl Mul<f64> for Vector3D {
     type Output = Vector3D;
@@ -162,15 +143,9 @@ impl Mul<f64> for Vector3D {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(
-            self.x * rhs,
-            self.y * rhs,
-            self.z * rhs,
-            self.w,
-        )
+        Vector3D::new(self.x * rhs, self.y * rhs, self.z * rhs, self.w)
     }
 }
-
 
 impl Div<f64> for Vector3D {
     type Output = Vector3D;
@@ -180,12 +155,7 @@ impl Div<f64> for Vector3D {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(
-            self.x / rhs,
-            self.y / rhs,
-            self.z / rhs,
-            self.w,
-        )
+        Vector3D::new(self.x / rhs, self.y / rhs, self.z / rhs, self.w)
     }
 }
 
@@ -229,7 +199,6 @@ mod tests {
         assert_eq!(vector_a + vector_b, vector_sum);
     }
 
-
     #[test]
     #[should_panic]
     fn test_add_point_point() {
@@ -240,7 +209,6 @@ mod tests {
 
         assert_eq!(point_a + point_b, point_sum);
     }
-
 
     #[test]
     fn test_subtract_vectors() {
@@ -268,7 +236,6 @@ mod tests {
         assert_eq!(-vector_a + vector_a, zero);
         assert_eq!(vector_a - vector_a, zero);
     }
-
 
     #[test]
     fn test_scalar_multiplication() {
@@ -299,7 +266,6 @@ mod tests {
         assert_eq!(vector_a / 3.0, result);
     }
 
-
     #[test]
     fn test_magnitude() {
         let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
@@ -312,7 +278,6 @@ mod tests {
         let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
         assert_eq!(vector_a.normalize().magnitude(), 1.0);
     }
-
 
     #[test]
     fn test_dot() {

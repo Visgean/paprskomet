@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
@@ -7,8 +7,7 @@ pub struct Color {
     b: f64,
 }
 
-
-fn f_pixel(n: f64) -> usize{
+fn f_pixel(n: f64) -> usize {
     // we store pixels in f64 but for ppm format we need them as integers..
     let x = n * 255.0;
     let mut int_x = x as usize;
@@ -19,30 +18,38 @@ fn f_pixel(n: f64) -> usize{
     int_x
 }
 
-
 impl Color {
-    pub fn new (r: f64, g: f64, b: f64) -> Self {
-        Self {r, g, b}
+    pub fn new(r: f64, g: f64, b: f64) -> Self {
+        Self { r, g, b }
     }
 
     pub fn black() -> Self {
-        Self {r:0.0, g:0.0, b:0.0}
+        Self {
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn red() -> Self {
-        Self {r:1.0, g:0.0, b:0.0}
+        Self {
+            r: 1.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn to_str(&self) -> String {
-        format!("{} {} {}\n", f_pixel(self.r), f_pixel(self.g), f_pixel(self.b))
+        format!(
+            "{} {} {}\n",
+            f_pixel(self.r),
+            f_pixel(self.g),
+            f_pixel(self.b)
+        )
     }
 
-
-
     pub fn magnitude(&self) -> f64 {
-        (
-            self.r.powi(2) + self.g.powi(2) + self.b.powi(2)
-        ).sqrt()
+        (self.r.powi(2) + self.g.powi(2) + self.b.powi(2)).sqrt()
     }
 
     pub fn normalize(&self) -> Self {
@@ -55,13 +62,9 @@ impl Color {
     }
 
     pub fn dot(&self, rhs: &Self) -> f64 {
-        self.r * rhs.r +
-        self.g * rhs.g +
-        self.b * rhs.b
+        self.r * rhs.r + self.g * rhs.g + self.b * rhs.b
     }
 }
-
-
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
@@ -73,11 +76,7 @@ impl Add for Color {
     type Output = Color;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Color::new(
-            self.r + rhs.r,
-            self.g + rhs.g,
-            self.b + rhs.b,
-        )
+        Color::new(self.r + rhs.r, self.g + rhs.g, self.b + rhs.b)
     }
 }
 
@@ -85,51 +84,31 @@ impl Sub for Color {
     type Output = Color;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        Color::new(
-            self.r - rhs.r,
-            self.g - rhs.g,
-            self.b - rhs.b,
-        )
+        Color::new(self.r - rhs.r, self.g - rhs.g, self.b - rhs.b)
     }
 }
-
-
 
 impl Mul<Color> for f64 {
     type Output = Color;
 
     fn mul(self, rhs: Color) -> Self::Output {
-        Color::new(
-            self * rhs.r,
-            self * rhs.g,
-            self * rhs.b,
-        )
+        Color::new(self * rhs.r, self * rhs.g, self * rhs.b)
     }
 }
-
 
 impl Mul<f64> for Color {
     type Output = Color;
 
     fn mul(self, rhs: f64) -> Self::Output {
-        Color::new(
-            self.r * rhs,
-            self.g * rhs,
-            self.b * rhs,
-        )
+        Color::new(self.r * rhs, self.g * rhs, self.b * rhs)
     }
 }
-
 
 impl Div<f64> for Color {
     type Output = Color;
 
     fn div(self, rhs: f64) -> Self::Output {
-        Color::new(
-            self.r / rhs,
-            self.g / rhs,
-            self.b / rhs,
-        )
+        Color::new(self.r / rhs, self.g / rhs, self.b / rhs)
     }
 }
 
@@ -137,14 +116,9 @@ impl Mul<Color> for Color {
     type Output = Color;
 
     fn mul(self, rhs: Color) -> Self::Output {
-        Color::new(
-            self.r * rhs.r,
-            self.g * rhs.g,
-            self.b * rhs.b,
-        )
+        Color::new(self.r * rhs.r, self.g * rhs.g, self.b * rhs.b)
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -175,7 +149,6 @@ mod tests {
         assert_eq!(color_a + color_b, color_sum);
     }
 
-
     #[test]
     fn test_subtract_vectors() {
         let color_a = Color::new(1.0, 2.0, 3.0);
@@ -186,7 +159,6 @@ mod tests {
         assert_eq!(color_a - color_b, color_sum);
     }
 
-
     #[test]
     fn test_scalar_multiplication() {
         let color_a = Color::new(1.0, 2.0, 3.0);
@@ -196,7 +168,6 @@ mod tests {
         assert_eq!(color_a * 3.0, result);
     }
 
-
     #[test]
     fn test_scalar_div() {
         let color_a = Color::new(3.0, 6.0, 9.0);
@@ -204,7 +175,6 @@ mod tests {
 
         assert_eq!(color_a / 3.0, result);
     }
-
 
     #[test]
     fn test_magnitude() {
@@ -217,7 +187,6 @@ mod tests {
         let color_a = Color::new(3.0, 6.0, 9.0);
         assert_eq!(color_a.normalize().magnitude(), 1.0);
     }
-
 
     #[test]
     fn test_dot() {
@@ -235,8 +204,4 @@ mod tests {
 
         assert_eq!(color_a * color_b, color_c);
     }
-
-
-
-
 }

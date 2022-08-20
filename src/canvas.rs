@@ -1,7 +1,6 @@
 use crate::colors::Color;
 use std::fs;
 
-
 #[derive(Debug, Clone)]
 pub struct Canvas {
     width: usize,
@@ -34,13 +33,14 @@ impl Canvas {
         self.pixels[row][x] = color;
     }
 
-
     pub fn to_ppm(&self) -> String {
         let header = format!("P3\n{} {}\n255", self.width, self.height);
 
-        let pixel_array: Vec<String> = self.pixels.iter().map(
-            |x| x.iter().map(|p| p.to_str()).collect()
-        ).collect();
+        let pixel_array: Vec<String> = self
+            .pixels
+            .iter()
+            .map(|x| x.iter().map(|p| p.to_str()).collect())
+            .collect();
 
         let string_value = pixel_array.join("\n");
 
@@ -51,7 +51,6 @@ impl Canvas {
         fs::write(filename, self.to_ppm()).expect("Unable to write file");
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -72,7 +71,6 @@ mod tests {
         assert_eq!(Color::red(), canvas.pixels[1][1])
     }
 
-
     //
     // #[test]
     // fn test_ppm() {
@@ -82,4 +80,3 @@ mod tests {
     //     assert_eq!("potato", canvas.to_ppm())
     // }
 }
-
