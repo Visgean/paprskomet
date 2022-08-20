@@ -2,14 +2,14 @@ use crate::utils::float_compare;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, Clone, Copy)]
-pub struct Vector3D {
+pub struct Tuple {
     pub x: f64,
     pub y: f64,
     pub z: f64,
     pub w: f64,
 }
 
-impl Vector3D {
+impl Tuple {
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
         Self {
             x: x,
@@ -63,7 +63,7 @@ impl Vector3D {
             panic!("Cant add point to point!")
         }
 
-        Vector3D::new(
+        Tuple::new(
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
             self.x * rhs.y - self.y * rhs.x,
@@ -72,7 +72,7 @@ impl Vector3D {
     }
 }
 
-impl PartialEq for Vector3D {
+impl PartialEq for Tuple {
     fn eq(&self, other: &Self) -> bool {
         float_compare(self.x, other.x)
             && float_compare(self.y, other.y)
@@ -81,15 +81,15 @@ impl PartialEq for Vector3D {
     }
 }
 
-impl Add for Vector3D {
-    type Output = Vector3D;
+impl Add for Tuple {
+    type Output = Tuple;
 
     fn add(self, rhs: Self) -> Self::Output {
         if self.w == 1.0 && rhs.w == 1.0 {
             panic!("Cant add point to point!")
         }
 
-        Vector3D::new(
+        Tuple::new(
             self.x + rhs.x,
             self.y + rhs.y,
             self.z + rhs.z,
@@ -98,15 +98,15 @@ impl Add for Vector3D {
     }
 }
 
-impl Sub for Vector3D {
-    type Output = Vector3D;
+impl Sub for Tuple {
+    type Output = Tuple;
 
     fn sub(self, rhs: Self) -> Self::Output {
         if self.w == 1.0 && rhs.w == 1.0 {
             panic!("Cant add point to point!")
         }
 
-        Vector3D::new(
+        Tuple::new(
             self.x - rhs.x,
             self.y - rhs.y,
             self.z - rhs.z,
@@ -115,58 +115,58 @@ impl Sub for Vector3D {
     }
 }
 
-impl Neg for Vector3D {
-    type Output = Vector3D;
+impl Neg for Tuple {
+    type Output = Tuple;
 
     fn neg(self) -> Self::Output {
-        Vector3D::new(-self.x, -self.y, -self.z, self.w)
+        Tuple::new(-self.x, -self.y, -self.z, self.w)
     }
 }
 
-impl Mul<Vector3D> for f64 {
-    type Output = Vector3D;
+impl Mul<Tuple> for f64 {
+    type Output = Tuple;
 
-    fn mul(self, rhs: Vector3D) -> Self::Output {
+    fn mul(self, rhs: Tuple) -> Self::Output {
         if rhs.w == 1.0 {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(self * rhs.x, self * rhs.y, self * rhs.z, rhs.w)
+        Tuple::new(self * rhs.x, self * rhs.y, self * rhs.z, rhs.w)
     }
 }
 
-impl Mul<f64> for Vector3D {
-    type Output = Vector3D;
+impl Mul<f64> for Tuple {
+    type Output = Tuple;
 
     fn mul(self, rhs: f64) -> Self::Output {
         if self.w == 1.0 {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(self.x * rhs, self.y * rhs, self.z * rhs, self.w)
+        Tuple::new(self.x * rhs, self.y * rhs, self.z * rhs, self.w)
     }
 }
 
-impl Div<f64> for Vector3D {
-    type Output = Vector3D;
+impl Div<f64> for Tuple {
+    type Output = Tuple;
 
     fn div(self, rhs: f64) -> Self::Output {
         if self.w == 1.0 {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Vector3D::new(self.x / rhs, self.y / rhs, self.z / rhs, self.w)
+        Tuple::new(self.x / rhs, self.y / rhs, self.z / rhs, self.w)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::utils::float_compare;
-    use crate::vectors::Vector3D;
+    use crate::vectors::Tuple;
 
     #[test]
     fn test_point() {
-        let point = Vector3D::point(1.0, 2.0, 3.0);
+        let point = Tuple::point(1.0, 2.0, 3.0);
         assert_eq!(point.x, 1.0);
         assert_eq!(point.y, 2.0);
         assert_eq!(point.w, 1.0);
@@ -174,27 +174,27 @@ mod tests {
 
     #[test]
     fn test_compare() {
-        let point_a = Vector3D::point(1.0, 2.0, 3.0);
-        let point_b = Vector3D::point(1.0, 2.0, 3.0);
+        let point_a = Tuple::point(1.0, 2.0, 3.0);
+        let point_b = Tuple::point(1.0, 2.0, 3.0);
         assert_eq!(point_a, point_b);
     }
 
     #[test]
     fn test_add_vectors() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let vector_b = Vector3D::vector(2.0, 3.0, 5.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let vector_b = Tuple::vector(2.0, 3.0, 5.0);
 
-        let vector_sum = Vector3D::vector(3.0, 5.0, 8.0);
+        let vector_sum = Tuple::vector(3.0, 5.0, 8.0);
 
         assert_eq!(vector_a + vector_b, vector_sum);
     }
 
     #[test]
     fn test_add_vector_point() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let vector_b = Vector3D::point(2.0, 3.0, 5.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let vector_b = Tuple::point(2.0, 3.0, 5.0);
 
-        let vector_sum = Vector3D::point(3.0, 5.0, 8.0);
+        let vector_sum = Tuple::point(3.0, 5.0, 8.0);
 
         assert_eq!(vector_a + vector_b, vector_sum);
     }
@@ -202,36 +202,36 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_add_point_point() {
-        let point_a = Vector3D::point(1.0, 2.0, 3.0);
-        let point_b = Vector3D::point(2.0, 3.0, 5.0);
+        let point_a = Tuple::point(1.0, 2.0, 3.0);
+        let point_b = Tuple::point(2.0, 3.0, 5.0);
 
-        let point_sum = Vector3D::point(3.0, 5.0, 8.0);
+        let point_sum = Tuple::point(3.0, 5.0, 8.0);
 
         assert_eq!(point_a + point_b, point_sum);
     }
 
     #[test]
     fn test_subtract_vectors() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let vector_b = Vector3D::vector(2.0, 3.0, 5.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let vector_b = Tuple::vector(2.0, 3.0, 5.0);
 
-        let vector_sum = Vector3D::vector(-1.0, -1.0, -2.0);
+        let vector_sum = Tuple::vector(-1.0, -1.0, -2.0);
 
         assert_eq!(vector_a - vector_b, vector_sum);
     }
 
     #[test]
     fn test_neg_ident() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let neg = Vector3D::vector(-1.0, -2.0, -3.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let neg = Tuple::vector(-1.0, -2.0, -3.0);
 
         assert_eq!(-vector_a, neg);
     }
 
     #[test]
     fn test_zero() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let zero = Vector3D::vector(0.0, 0.0, 0.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let zero = Tuple::vector(0.0, 0.0, 0.0);
 
         assert_eq!(-vector_a + vector_a, zero);
         assert_eq!(vector_a - vector_a, zero);
@@ -239,8 +239,8 @@ mod tests {
 
     #[test]
     fn test_scalar_multiplication() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let result = Vector3D::vector(3.0, 6.0, 9.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let result = Tuple::vector(3.0, 6.0, 9.0);
 
         assert_eq!(3.0 * vector_a, result);
         assert_eq!(vector_a * 3.0, result);
@@ -249,48 +249,48 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_scalar_point_mul() {
-        let _point_a = Vector3D::point(1.0, 2.0, 3.0) * 3.0;
+        let _point_a = Tuple::point(1.0, 2.0, 3.0) * 3.0;
     }
 
     #[test]
     #[should_panic]
     fn test_scalar_point_mul_reverse() {
-        let _point_a = 3.0 * Vector3D::point(1.0, 2.0, 3.0);
+        let _point_a = 3.0 * Tuple::point(1.0, 2.0, 3.0);
     }
 
     #[test]
     fn test_scalar_div() {
-        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
-        let result = Vector3D::vector(1.0, 2.0, 3.0);
+        let vector_a = Tuple::vector(3.0, 6.0, 9.0);
+        let result = Tuple::vector(1.0, 2.0, 3.0);
 
         assert_eq!(vector_a / 3.0, result);
     }
 
     #[test]
     fn test_magnitude() {
-        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
+        let vector_a = Tuple::vector(3.0, 6.0, 9.0);
 
         assert!(float_compare(vector_a.magnitude(), 11.224972));
     }
 
     #[test]
     fn test_normalization() {
-        let vector_a = Vector3D::vector(3.0, 6.0, 9.0);
+        let vector_a = Tuple::vector(3.0, 6.0, 9.0);
         assert_eq!(vector_a.normalize().magnitude(), 1.0);
     }
 
     #[test]
     fn test_dot() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let vector_b = Vector3D::vector(2.0, 3.0, 4.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let vector_b = Tuple::vector(2.0, 3.0, 4.0);
         assert_eq!(vector_a.dot(&vector_b), 20.0);
     }
 
     #[test]
     fn test_cross() {
-        let vector_a = Vector3D::vector(1.0, 2.0, 3.0);
-        let vector_b = Vector3D::vector(2.0, 3.0, 4.0);
-        let vector_c = Vector3D::vector(-1.0, 2.0, -1.0);
+        let vector_a = Tuple::vector(1.0, 2.0, 3.0);
+        let vector_b = Tuple::vector(2.0, 3.0, 4.0);
+        let vector_c = Tuple::vector(-1.0, 2.0, -1.0);
         assert_eq!(vector_a.cross(&vector_b), vector_c);
     }
 }

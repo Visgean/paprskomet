@@ -1,11 +1,11 @@
 use crate::utils::float_compare;
 use std::iter::zip;
 
-use crate::vectors::Vector3D;
+use crate::vectors::Tuple;
 use std::ops::Mul;
 
 #[derive(Debug, Clone)]
-struct M {
+pub struct M {
     data: Vec<Vec<f64>>,
     pub rows: usize,
     pub columns: usize,
@@ -202,22 +202,26 @@ impl Mul<M> for M {
     }
 }
 
-impl Mul<Vector3D> for M {
-    type Output = M;
+impl Mul<Tuple> for M {
+    type Output = Tuple;
 
-    fn mul(self, rhs: Vector3D) -> Self::Output {
+    fn mul(self, rhs: Tuple) -> Self::Output {
         // convert vector to one column matrix..
 
         let m_v = M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]]).unwrap();
 
-        self * m_v
+        let r = self * m_v;
+
+        Tuple::new(r.get(0, 0), r.get(1, 0), r.get(2, 0), r.get(3, 0))
+
+
     }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::matrix::M;
-    use crate::vectors::Vector3D;
+    use crate::vectors::Tuple;
 
     #[test]
     fn test_matrix_4x4_init() {
@@ -323,11 +327,10 @@ mod tests {
         ])
         .unwrap();
 
-        let v1 = Vector3D::new(1.0, 2.0, 3.0, 1.0);
+        let v1 = Tuple::new(1.0, 2.0, 3.0, 1.0);
+        let v2 = Tuple::new(18.0, 24.0, 33.0, 1.0);
 
-        let m2 = M::new(vec![vec![18.0], vec![24.0], vec![33.0], vec![1.0]]).unwrap();
-
-        assert_eq!(m1 * v1, m2)
+        assert_eq!(m1 * v1, v2)
     }
 
     #[test]
