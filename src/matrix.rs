@@ -120,6 +120,10 @@ impl M {
         det
     }
 
+    pub fn invertible(&self) -> bool {
+        !float_compare(self.det(), 0.0)
+    }
+
 
     pub fn submatrix(&self, row: usize, col: usize) -> M{
         let mut m = self.clone();
@@ -148,6 +152,28 @@ impl M {
 
         r
     }
+
+    pub fn inverse(&self) -> M {
+        let d = self.det();
+        if float_compare(d, 0.0) {
+            panic!("Cant invert non-invertible matrix!!");
+        }
+
+        let mut r = M::empty_matrix(self.rows, self.columns);
+
+        for row in 0..self.rows {
+            for col in 0..self.columns {
+                let cof = self.cofactor(row, col);
+                r.set(col, row, cof / d)
+            }
+        }
+
+
+
+
+        r
+    }
+
 
 
 }
@@ -545,4 +571,77 @@ mod tests {
 
         assert_eq!(m1.det(), -4071.0);
     }
+
+    #[test]
+    fn test_invertible() {
+
+
+        let m1 = M::new(
+            vec![
+                vec![6.0,  4.0, 4.0,  4.0],
+                vec![5.0,  5.0, 7.0,  6.0],
+                vec![4.0, -9.0, 3.0, -7.0],
+                vec![9.0,  1.0, 7.0, -6.0],
+            ]
+        ).unwrap();
+        assert!(m1.invertible());
+        assert_eq!(m1.det(), -2120.0);
+    }
+
+    #[test]
+    fn test_non_invertible() {
+        let m1 = M::new(
+            vec![
+                vec![ -4.0,  2.0, -2.0, -3.0],
+                vec![  9.0,  6.0,  2.0,  6.0],
+                vec![  0.0, -5.0,  1.0, -5.0],
+                vec![  0.0,  0.0,  0.0,  0.0],
+            ]
+        ).unwrap();
+        assert!(!m1.invertible());
+        assert_eq!(m1.det(), 0.0);
+    }
+
+
+    #[test]
+    fn test_inverse() {
+        let m1 = M::new(
+            vec![
+                vec![-5.0,  2.0,  6.0, -8.0],
+                vec![ 1.0, -5.0,  1.0,  8.0],
+                vec![ 7.0,  7.0, -6.0, -7.0],
+                vec![ 1.0, -3.0,  7.0,  4.0],
+            ]
+        ).unwrap();
+
+        let m1_inverse = m1.inverse();
+
+
+        // Then determinant(A) = 532
+        assert_eq!(m1.det(), 532.0);
+        // And cofactor(A, 2, 3) = -160
+        assert_eq!(m1.cofactor(2, 3), -160.0);
+        // And B[3,2] = -160/532
+        assert_eq!(m1_inverse.get(3, 2), -160.0 / 532.0);
+        // And cofactor(A, 3, 2) = 105
+        assert_eq!(m1.cofactor(3 ,2), 105.0);
+        // And B[2,3] = 105/532
+        assert_eq!(m1_inverse.get(2,3), 105.0 / 532.0);
+
+
+        let m1_inverse_exp = M::new(
+            vec![
+                vec![ 0.21805,  0.45113,  0.24060,-0.04511],
+                vec![-0.80827, -1.45677, -0.44361, 0.52068],
+                vec![-0.07895, -0.22368, -0.05263, 0.19737],
+                vec![-0.52256, -0.81391, -0.30075, 0.30639],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1_inverse, m1_inverse_exp);
+
+
+
+    }
+
 }

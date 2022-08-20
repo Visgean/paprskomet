@@ -1,4 +1,3 @@
-
 mod canvas;
 mod projectile;
 pub mod vectors;
