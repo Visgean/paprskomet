@@ -134,7 +134,20 @@ impl M {
         m
     }
 
+    pub fn minor(&self, row: usize, col: usize) -> f32{
+        return self.submatrix(row, col).det();
+    }
 
+
+    pub fn cofactor(&self, row: usize, col: usize) -> f32{
+        let r  = self.minor(row, col);
+
+        if (row + col) % 2 == 1 {
+            return -r
+        }
+
+        r
+    }
 
 
 }
@@ -465,6 +478,37 @@ mod tests {
         assert_eq!(m1.submatrix(1, 1), subm);
     }
 
+    #[test]
+    fn test_minor() {
+        let m1 = M::new(
+            vec![
+                vec![3.0, 5.0, 0.0],
+                vec![2.0, -1.0, -7.0],
+                vec![6.0, -1.0, 5.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.minor(1, 0), 25.0);
+    }
+
+
+    #[test]
+    fn test_cofactor() {
+        let m1 = M::new(
+            vec![
+                vec![3.0, 5.0, 0.0],
+                vec![2.0, -1.0, -7.0],
+                vec![6.0, -1.0, 5.0],
+            ]
+        ).unwrap();
+
+        assert_eq!(m1.minor(0, 0), -12.0);
+        assert_eq!(m1.cofactor(0, 0), -12.0);
+
+        // test for sign change
+        assert_eq!(m1.minor(1, 0), 25.0);
+        assert_eq!(m1.cofactor(1, 0), -25.0);
+    }
 
 
 
