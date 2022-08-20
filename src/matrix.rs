@@ -625,4 +625,21 @@ mod tests {
         let c = m_a.clone() * m_b.clone();
         assert_eq!(m_a, c * m_b.inverse());
     }
+
+
+    #[test]
+    fn test_inverse_itself() {
+        let m_a = M::new(vec![
+            vec![3.0, -9.0, 7.0, 3.0],
+            vec![3.0, -8.0, 2.0, -9.0],
+            vec![-4.0, 4.0, 4.0, 1.0],
+            vec![-6.0, 5.0, -1.0, 1.0],
+        ])
+            .unwrap();
+
+        let c = m_a.clone() * m_a.inverse();
+        assert_eq!(c, M::ident(4));
+    }
+
+
 }
