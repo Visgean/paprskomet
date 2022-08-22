@@ -233,6 +233,32 @@ mod tests {
     }
 
 
+    #[test]
+    fn test_sequense() {
+        let p = Tuple::point(1.0,  0.0, 1.0);
+        let m_a = rotation_x(PI / 2.0);
+        let m_b = scaling(5., 5., 5.);
+        let m_c = translation(10., 5., 7.);
+
+        let p2 = m_a.clone() * p;
+        assert_eq!(p2, Tuple::point(1.,  -1., 0.));
+
+        let p3 = m_b.clone() * p2;
+        assert_eq!(p3, Tuple::point(5.,  -5., 0.));
+
+        let p4 = m_c.clone() * p3;
+        assert_eq!(p4, Tuple::point(15.,  0., 7.));
+
+        // should be same as:
+        assert_eq!(
+            m_c * m_b * m_a * p,
+            p4
+        );
+
+
+    }
+
+
 
 
 }
