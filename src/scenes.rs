@@ -1,5 +1,5 @@
-use std::f64::consts::PI;
 use crate::vectors::Tuple;
+use std::f64::consts::PI;
 
 use crate::canvas::Canvas;
 use crate::colors::Color;
@@ -39,7 +39,6 @@ pub fn projectile(max_x: f64) -> Vec<Tuple> {
     position_log
 }
 
-
 pub fn clock() {
     let mut canvas = Canvas::new(1200, 800);
 
@@ -53,32 +52,5 @@ pub fn clock() {
         canvas.write_point(p, Color::red());
     }
 
-
     canvas.write_ppm("./clock.ppm");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

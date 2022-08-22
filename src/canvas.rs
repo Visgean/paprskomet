@@ -1,6 +1,6 @@
 use crate::colors::Color;
-use std::fs;
 use crate::vectors::Tuple;
+use std::fs;
 
 #[derive(Debug, Clone)]
 pub struct Canvas {
@@ -49,7 +49,6 @@ impl Canvas {
 
         self.write_origin(x, y, color);
     }
-
 
     pub fn to_ppm(&self) -> String {
         let header = format!("P3\n{} {}\n255", self.width, self.height);

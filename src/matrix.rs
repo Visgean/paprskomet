@@ -213,8 +213,6 @@ impl Mul<Tuple> for M {
         let r = self * m_v;
 
         Tuple::new(r.get(0, 0), r.get(1, 0), r.get(2, 0), r.get(3, 0))
-
-
     }
 }
 
@@ -629,7 +627,6 @@ mod tests {
         assert_eq!(m_a, c * m_b.inverse());
     }
 
-
     #[test]
     fn test_inverse_itself() {
         let m_a = M::new(vec![
@@ -638,11 +635,9 @@ mod tests {
             vec![-4.0, 4.0, 4.0, 1.0],
             vec![-6.0, 5.0, -1.0, 1.0],
         ])
-            .unwrap();
+        .unwrap();
 
         let c = m_a.clone() * m_a.inverse();
         assert_eq!(c, M::ident(4));
     }
-
-
 }
