@@ -1,5 +1,6 @@
 use crate::colors::Color;
 use std::fs;
+use crate::vectors::Tuple;
 
 #[derive(Debug, Clone)]
 pub struct Canvas {
@@ -32,6 +33,23 @@ impl Canvas {
         let row = self.height - y - 1;
         self.pixels[row][x] = color;
     }
+
+    pub fn write_origin(&mut self, x: isize, y: isize, color: Color) {
+        // writes pixel referenced by midpoint of the canvas...
+
+        let mid_x = self.width as isize / 2;
+        let mid_y = self.height as isize / 2;
+
+        self.write((mid_x + x) as usize, (mid_y + y) as usize, color);
+    }
+
+    pub fn write_point(&mut self, p: Tuple, color: Color) {
+        let x = p.x as isize;
+        let y = p.y as isize;
+
+        self.write_origin(x, y, color);
+    }
+
 
     pub fn to_ppm(&self) -> String {
         let header = format!("P3\n{} {}\n255", self.width, self.height);

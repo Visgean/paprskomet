@@ -1,12 +1,19 @@
 use crate::utils::float_compare;
 use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::fmt; // Import `fmt`
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, )]
 pub struct Tuple {
     pub x: f64,
     pub y: f64,
     pub z: f64,
     pub w: f64,
+}
+
+impl fmt::Display for Tuple {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({:.2}, {:.2}, {:.2}, {:.2})", self.x, self.y, self.z, self.w)
+    }
 }
 
 impl Tuple {
