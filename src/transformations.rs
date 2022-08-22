@@ -47,13 +47,20 @@ pub fn rotation_z(r: f64) -> M {
     ]).unwrap()
 }
 
-
+pub fn shearing(x_y: f64, x_z: f64, y_x: f64, y_z: f64, z_x: f64, z_y:f64) -> M {
+    M::new(vec![
+        vec![1.0, x_y, x_z, 0.0],
+        vec![y_x, 1.0, y_z, 0.0],
+        vec![z_x, z_y, 1.0, 0.0],
+        vec![0.0, 0.0, 0.0, 1.0],
+    ]).unwrap()
+}
 
 
 #[cfg(test)]
 mod tests {
     use std::f64::consts::PI;
-    use crate::transformations::{scaling, translation, rotation_x, rotation_y, rotation_z};
+    use crate::transformations::{scaling, translation, rotation_x, rotation_y, rotation_z, shearing};
 
     use crate::vectors::Tuple;
 
@@ -213,4 +220,19 @@ mod tests {
             Tuple::point(-1.0, 0.0, 0.0)
         );
     }
+
+    #[test]
+    fn test_shearing_x_y() {
+        let v_a = Tuple::vector(2.0, 3.0, 4.0);
+        let v_b = Tuple::vector(5.0, 3.0, 4.0);
+
+        assert_eq!(
+            shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * v_a,
+            v_b
+        )
+    }
+
+
+
+
 }
