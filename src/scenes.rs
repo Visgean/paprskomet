@@ -43,10 +43,12 @@ pub fn projectile(max_x: f64) -> Vec<Tuple> {
 pub fn clock() {
     let mut canvas = Canvas::new(1200, 800);
 
-    let mut p = Tuple::vector(0., 300., 0.);
-    let d = rotation_z((2. * PI) / 12.);
+    let steps = 120;
 
-    for i in 0..12 {
+    let mut p = Tuple::vector(0., 300., 0.);
+    let d = rotation_z((2. * PI) / (steps as f64));
+
+    for i in 0..steps {
         p = d.clone() * p;
         canvas.write_point(p, Color::red());
     }
