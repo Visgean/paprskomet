@@ -47,13 +47,20 @@ pub fn rotation_z(r: f64) -> M {
     ]).unwrap()
 }
 
-
+pub fn shearing(x_y: f64, x_z: f64, y_x: f64, y_z: f64, z_x: f64, z_y:f64) -> M {
+    M::new(vec![
+        vec![1.0, x_y, x_z, 0.0],
+        vec![y_x, 1.0, y_z, 0.0],
+        vec![z_x, z_y, 1.0, 0.0],
+        vec![0.0, 0.0, 0.0, 1.0],
+    ]).unwrap()
+}
 
 
 #[cfg(test)]
 mod tests {
     use std::f64::consts::PI;
-    use crate::transformations::{scaling, translation, rotation_x, rotation_y, rotation_z};
+    use crate::transformations::{scaling, translation, rotation_x, rotation_y, rotation_z, shearing};
 
     use crate::vectors::Tuple;
 
@@ -213,4 +220,45 @@ mod tests {
             Tuple::point(-1.0, 0.0, 0.0)
         );
     }
+
+    #[test]
+    fn test_shearing_x_y() {
+        let v_a = Tuple::vector(2.0, 3.0, 4.0);
+        let v_b = Tuple::vector(5.0, 3.0, 4.0);
+
+        assert_eq!(
+            shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * v_a,
+            v_b
+        )
+    }
+
+
+    #[test]
+    fn test_sequense() {
+        let p = Tuple::point(1.0,  0.0, 1.0);
+        let m_a = rotation_x(PI / 2.0);
+        let m_b = scaling(5., 5., 5.);
+        let m_c = translation(10., 5., 7.);
+
+        let p2 = m_a.clone() * p;
+        assert_eq!(p2, Tuple::point(1.,  -1., 0.));
+
+        let p3 = m_b.clone() * p2;
+        assert_eq!(p3, Tuple::point(5.,  -5., 0.));
+
+        let p4 = m_c.clone() * p3;
+        assert_eq!(p4, Tuple::point(15.,  0., 7.));
+
+        // should be same as:
+        assert_eq!(
+            m_c * m_b * m_a * p,
+            p4
+        );
+
+
+    }
+
+
+
+
 }
