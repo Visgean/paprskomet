@@ -193,7 +193,7 @@ mod tests {
     }
 
     #[test]
-    fn test_sequense() {
+    fn test_sequence() {
         let p = Tuple::point(1.0, 0.0, 1.0);
         let m_a = rotation_x(PI / 2.0);
         let m_b = scaling(5., 5., 5.);
