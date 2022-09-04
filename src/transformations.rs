@@ -50,7 +50,14 @@ pub fn rotation_z(r: f64) -> M {
     .unwrap()
 }
 
-pub fn shearing(x_y: f64, x_z: f64, y_x: f64, y_z: f64, z_x: f64, z_y: f64) -> M {
+pub fn shearing(
+    x_y: f64,
+    x_z: f64,
+    y_x: f64,
+    y_z: f64,
+    z_x: f64,
+    z_y: f64,
+) -> M {
     M::new(vec![
         vec![1.0, x_y, x_z, 0.0],
         vec![y_x, 1.0, y_z, 0.0],
@@ -63,7 +70,8 @@ pub fn shearing(x_y: f64, x_z: f64, y_x: f64, y_z: f64, z_x: f64, z_y: f64) -> M
 #[cfg(test)]
 mod tests {
     use crate::transformations::{
-        rotation_x, rotation_y, rotation_z, scaling, shearing, translation,
+        rotation_x, rotation_y, rotation_z, scaling,
+        shearing, translation,
     };
     use std::f64::consts::PI;
 
@@ -74,7 +82,10 @@ mod tests {
         let point_a = Tuple::point(-3.0, 4.0, 5.0);
         let point_b = Tuple::point(2.0, 1.0, 7.0);
 
-        assert_eq!(translation(5.0, -3.0, 2.0) * point_a, point_b)
+        assert_eq!(
+            translation(5.0, -3.0, 2.0) * point_a,
+            point_b
+        )
     }
 
     #[test]
@@ -94,7 +105,10 @@ mod tests {
     fn test_translation() {
         let point_a = Tuple::vector(-3.0, 4.0, 5.0);
 
-        assert_eq!(translation(5.0, -3.0, 2.0) * point_a, point_a)
+        assert_eq!(
+            translation(5.0, -3.0, 2.0) * point_a,
+            point_a
+        )
     }
 
     #[test]
@@ -102,7 +116,10 @@ mod tests {
         let point_a = Tuple::point(-4.0, 6.0, 8.0);
         let point_b = Tuple::point(-8.0, 18.0, 32.0);
 
-        assert_eq!(scaling(2.0, 3.0, 4.0) * point_a, point_b)
+        assert_eq!(
+            scaling(2.0, 3.0, 4.0) * point_a,
+            point_b
+        )
     }
 
     #[test]
@@ -118,7 +135,10 @@ mod tests {
         let v_a = Tuple::vector(-4.0, 6.0, 8.0);
         let v_b = Tuple::vector(-2.0, 2.0, 2.0);
 
-        assert_eq!(scaling(2.0, 3.0, 4.0).inverse() * v_a, v_b)
+        assert_eq!(
+            scaling(2.0, 3.0, 4.0).inverse() * v_a,
+            v_b
+        )
     }
 
     #[test]
@@ -138,9 +158,15 @@ mod tests {
 
         let sq2 = (2.0 as f64).sqrt();
 
-        assert_eq!(half_q * p, Tuple::point(0.0, sq2 / 2.0, sq2 / 2.0));
+        assert_eq!(
+            half_q * p,
+            Tuple::point(0.0, sq2 / 2.0, sq2 / 2.0)
+        );
 
-        assert_eq!(full_q * p, Tuple::point(0.0, 0.0, 1.0));
+        assert_eq!(
+            full_q * p,
+            Tuple::point(0.0, 0.0, 1.0)
+        );
     }
 
     #[test]
@@ -165,9 +191,15 @@ mod tests {
 
         let sq2 = (2.0 as f64).sqrt();
 
-        assert_eq!(half_q * p, Tuple::point(sq2 / 2.0, 0.0, sq2 / 2.0));
+        assert_eq!(
+            half_q * p,
+            Tuple::point(sq2 / 2.0, 0.0, sq2 / 2.0)
+        );
 
-        assert_eq!(full_q * p, Tuple::point(1.0, 0.0, 0.0));
+        assert_eq!(
+            full_q * p,
+            Tuple::point(1.0, 0.0, 0.0)
+        );
     }
 
     #[test]
@@ -179,9 +211,15 @@ mod tests {
 
         let sq2 = (2.0 as f64).sqrt();
 
-        assert_eq!(half_q * p, Tuple::point(-sq2 / 2.0, sq2 / 2.0, 0.0));
+        assert_eq!(
+            half_q * p,
+            Tuple::point(-sq2 / 2.0, sq2 / 2.0, 0.0)
+        );
 
-        assert_eq!(full_q * p, Tuple::point(-1.0, 0.0, 0.0));
+        assert_eq!(
+            full_q * p,
+            Tuple::point(-1.0, 0.0, 0.0)
+        );
     }
 
     #[test]
@@ -189,7 +227,10 @@ mod tests {
         let v_a = Tuple::vector(2.0, 3.0, 4.0);
         let v_b = Tuple::vector(5.0, 3.0, 4.0);
 
-        assert_eq!(shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * v_a, v_b)
+        assert_eq!(
+            shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0) * v_a,
+            v_b
+        )
     }
 
     #[test]

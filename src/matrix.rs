@@ -26,7 +26,9 @@ impl M {
         }
 
         if columns > 4 || rows > 4 {
-            return Err("Right now only 4x4 matrices are supported, sorry!".into());
+            return Err(
+                "Right now only 4x4 matrices are supported, sorry!".into()
+            );
         }
 
         for row in &data {
@@ -90,7 +92,8 @@ impl M {
     }
 
     pub fn transpose(&self) -> M {
-        let mut result = M::empty_matrix(self.rows, self.columns);
+        let mut result =
+            M::empty_matrix(self.rows, self.columns);
 
         for i in 0..self.rows {
             for j in 0..self.columns {
@@ -104,7 +107,8 @@ impl M {
         // base case:
 
         if self.columns == 2 && self.rows == 2 {
-            return self.get(0, 0) * self.get(1, 1) - self.get(0, 1) * self.get(1, 0);
+            return self.get(0, 0) * self.get(1, 1)
+                - self.get(0, 1) * self.get(1, 0);
         }
 
         let mut det = 0.0;
@@ -151,7 +155,8 @@ impl M {
             panic!("Cant invert non-invertible matrix!!");
         }
 
-        let mut r = M::empty_matrix(self.rows, self.columns);
+        let mut r =
+            M::empty_matrix(self.rows, self.columns);
 
         for row in 0..self.rows {
             for col in 0..self.columns {
@@ -166,14 +171,17 @@ impl M {
 
 impl PartialEq for M {
     fn eq(&self, other: &Self) -> bool {
-        if !(self.columns == other.columns && self.rows == other.rows) {
+        if !(self.columns == other.columns
+            && self.rows == other.rows)
+        {
             return false;
         }
 
         let flat_self = self.data.iter().flatten();
         let flat_other = other.data.iter().flatten();
 
-        zip(flat_self, flat_other).all(|(a, b)| float_compare(*a, *b))
+        zip(flat_self, flat_other)
+            .all(|(a, b)| float_compare(*a, *b))
     }
 }
 
@@ -194,7 +202,8 @@ impl Mul<M> for M {
             let row_vector = self.row(row);
 
             for col in 0..columns {
-                let x = dot_p(&row_vector, &rhs.column(col));
+                let x =
+                    dot_p(&row_vector, &rhs.column(col));
                 result.set(row, col, x);
             }
         }
@@ -208,11 +217,22 @@ impl Mul<Tuple> for M {
     fn mul(self, rhs: Tuple) -> Self::Output {
         // convert vector to one column matrix..
 
-        let m_v = M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]]).unwrap();
+        let m_v = M::new(vec![
+            vec![rhs.x],
+            vec![rhs.y],
+            vec![rhs.z],
+            vec![rhs.w],
+        ])
+        .unwrap();
 
         let r = self * m_v;
 
-        Tuple::new(r.get(0, 0), r.get(1, 0), r.get(2, 0), r.get(3, 0))
+        Tuple::new(
+            r.get(0, 0),
+            r.get(1, 0),
+            r.get(2, 0),
+            r.get(3, 0),
+        )
     }
 }
 
@@ -382,7 +402,9 @@ mod tests {
 
     #[test]
     fn test_small_det() {
-        let m1 = M::new(vec![vec![1.0, 5.0], vec![-3.0, 2.0]]).unwrap();
+        let m1 =
+            M::new(vec![vec![1.0, 5.0], vec![-3.0, 2.0]])
+                .unwrap();
 
         assert_eq!(m1.det(), 17.0);
     }
@@ -435,7 +457,9 @@ mod tests {
         ])
         .unwrap();
 
-        let subm = M::new(vec![vec![1.0, 4.0], vec![0.0, 1.0]]).unwrap();
+        let subm =
+            M::new(vec![vec![1.0, 4.0], vec![0.0, 1.0]])
+                .unwrap();
         assert_eq!(m1.submatrix(1, 1), subm);
     }
 

@@ -3,7 +3,9 @@ use std::f64::consts::PI;
 
 use crate::canvas::Canvas;
 use crate::colors::Color;
-use crate::transformations::{rotation_x, rotation_y, rotation_z, translation};
+use crate::transformations::{
+    rotation_x, rotation_y, rotation_z, translation,
+};
 
 pub fn write_projectile_image() {
     let mut canvas = Canvas::new(1200, 800);
@@ -26,7 +28,8 @@ pub fn projectile(max_x: f64) -> Vec<Tuple> {
     let wind = Tuple::vector(-0.03, 0.0, 0.0);
     let mut position = Tuple::point(0.0, 1.0, 0.0);
 
-    let mut velocity = Tuple::vector(1.0, 1.8, 0.0).normalize() * 30.0;
+    let mut velocity =
+        Tuple::vector(1.0, 1.8, 0.0).normalize() * 30.0;
 
     let mut position_log: Vec<Tuple> = vec![];
 
