@@ -1,6 +1,7 @@
 use crate::ray::Ray;
 use crate::vectors::Tuple;
 use uuid::Uuid;
+use crate::intersections::Intersection;
 
 struct Sphere {
     id: Uuid,
@@ -11,7 +12,7 @@ impl Sphere {
         Sphere { id: Uuid::new_v4() }
     }
 
-    pub fn intersects(&self, ray: Ray) -> Vec<f64> {
+    pub fn intersects(&self, ray: Ray) -> Vec<Intersection> {
         let sphere_to_ray =
             ray.origin - Tuple::point(0., 0., 0.);
         let a = ray.direction.dot(&ray.direction);
@@ -26,7 +27,16 @@ impl Sphere {
         let t1 = (-b - discriminant.sqrt()) / (2. * a);
         let t2 = (-b + discriminant.sqrt()) / (2. * a);
 
-        return vec![t1, t2];
+        vec![
+            Intersection {
+                object_id: self.id,
+                t: t1,
+            },
+            Intersection {
+                object_id: self.id,
+                t: t2,
+            },
+        ]
     }
 }
 
@@ -49,8 +59,8 @@ mod tests {
 
         assert_eq!(ints.len(), 2);
 
-        assert_eq!(ints[0], 4.0);
-        assert_eq!(ints[1], 6.0);
+        assert_eq!(ints[0].t, 4.0);
+        assert_eq!(ints[1].t, 6.0);
     }
 
     #[test]
@@ -65,8 +75,8 @@ mod tests {
 
         assert_eq!(ints.len(), 2);
 
-        assert_eq!(ints[0], 5.0);
-        assert_eq!(ints[1], 5.0);
+        assert_eq!(ints[0].t, 5.0);
+        assert_eq!(ints[1].t, 5.0);
     }
 
     #[test]
@@ -94,8 +104,8 @@ mod tests {
 
         assert_eq!(ints.len(), 2);
 
-        assert_eq!(ints[0], -1.);
-        assert_eq!(ints[1], 1.);
+        assert_eq!(ints[0].t, -1.);
+        assert_eq!(ints[1].t, 1.);
     }
 
     #[test]
@@ -110,8 +120,8 @@ mod tests {
 
         assert_eq!(ints.len(), 2);
 
-        assert_eq!(ints[0], -6.);
-        assert_eq!(ints[1], -4.);
+        assert_eq!(ints[0].t, -6.);
+        assert_eq!(ints[1].t, -4.);
     }
 
     #[test]
