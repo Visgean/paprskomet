@@ -3,6 +3,7 @@ use crate::vectors::Tuple;
 pub struct Ray {
     pub origin: Tuple,
     pub direction: Tuple,
+
 }
 
 impl Ray {
