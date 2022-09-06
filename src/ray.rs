@@ -1,3 +1,4 @@
+use crate::matrix::M;
 use crate::vectors::Tuple;
 
 #[derive(Debug, Clone, Copy)]
@@ -14,11 +15,20 @@ impl Ray {
     pub fn position(&self, t: f64) -> Tuple {
         self.origin + t * self.direction
     }
+
+    pub fn transform(&self, m: M) -> Ray {
+        Ray {
+            origin: m.clone() * self.origin,
+            direction: m * self.direction,
+        }
+    }
+
 }
 
 #[cfg(test)]
 mod tests {
     use crate::ray::Ray;
+    use crate::transformations::{scaling, translation};
     use crate::utils::float_compare;
     use crate::vectors::Tuple;
 
@@ -49,4 +59,37 @@ mod tests {
             Tuple::point(4.5, 3., 4.)
         );
     }
+
+
+    #[test]
+    fn test_translation() {
+        let r1 = Ray::new(
+            Tuple::point(1., 2., 3.),
+            Tuple::vector(0., 1., 0.),
+        );
+
+        let r1_result =  Ray::new(
+            Tuple::point(4., 6., 8.),
+            Tuple::vector(0., 1., 0.),
+        );
+
+        let r1_t = r1.transform(translation(5., 5., 5.));
+    }
+
+    #[test]
+    fn test_scaling() {
+        let r1 = Ray::new(
+            Tuple::point(1., 2., 3.),
+            Tuple::vector(0., 1., 0.),
+        );
+
+        let r1_result =  Ray::new(
+            Tuple::point(2., 6., 12.),
+            Tuple::vector(0., 3., 0.),
+        );
+
+        let r1_t = r1.transform(scaling(2., 3., 4.));
+    }
+
+
 }

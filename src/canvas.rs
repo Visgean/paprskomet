@@ -4,8 +4,8 @@ use std::fs;
 
 #[derive(Debug, Clone)]
 pub struct Canvas {
-    width: usize,
-    height: usize,
+    pub width: usize,
+    pub height: usize,
 
     pixels: Vec<Vec<Color>>,
 }

@@ -2,17 +2,30 @@ use crate::ray::Ray;
 use crate::vectors::Tuple;
 use uuid::Uuid;
 use crate::intersections::Intersection;
+use crate::matrix::M;
 
-struct Sphere {
-    id: Uuid,
+pub struct Sphere {
+    pub id: Uuid,
+    pub transform: M,
 }
 
 impl Sphere {
     pub fn new() -> Sphere {
-        Sphere { id: Uuid::new_v4() }
+
+        Sphere {
+            id: Uuid::new_v4(),
+            transform: M::ident(4),
+        }
     }
 
-    pub fn intersects(&self, ray: Ray) -> Vec<Intersection> {
+    fn transformed_ray(&self, ray: Ray) -> Ray {
+        ray.transform(self.transform.inverse())
+    }
+
+
+    pub fn intersects(&self, ray_original: Ray) -> Vec<Intersection> {
+        let ray = self.transformed_ray(ray_original);
+
         let sphere_to_ray =
             ray.origin - Tuple::point(0., 0., 0.);
         let a = ray.direction.dot(&ray.direction);

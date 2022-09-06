@@ -3,9 +3,10 @@ use std::f64::consts::PI;
 
 use crate::canvas::Canvas;
 use crate::colors::Color;
-use crate::transformations::{
-    rotation_x, rotation_y, rotation_z, translation,
-};
+use crate::geometries::Sphere;
+use crate::intersections::hit;
+use crate::ray::Ray;
+use crate::transformations::{rotation_x, rotation_y, rotation_z, scaling, translation};
 
 pub fn write_projectile_image() {
     let mut canvas = Canvas::new(1200, 800);
@@ -57,3 +58,43 @@ pub fn clock() {
 
     canvas.write_ppm("./clock.ppm");
 }
+
+
+
+pub fn ball_above() {
+    let mut canvas = Canvas::new(100, 100);
+
+
+    let mut ball = Sphere::new();
+    ball.transform = translation(100., 100., 0.) * scaling(40. , 90.,0.1);
+
+    for y in 0..canvas.height {
+        for x in 0..canvas.width {
+            let xf = x  as f64;
+            let yf = y as f64;
+
+            let hit = hit(ball.intersects(
+                Ray::new(
+                    Tuple::point(xf ,yf, 10.),
+                    Tuple::vector(xf, yf, -10.),
+                )
+            ));
+
+            match hit {
+                None => {}
+                Some(_) => {
+                    canvas.write(x, y, Color::red())
+                },
+            }
+        }
+
+    }
+    canvas.write_ppm("./ball-above.ppm");
+}
+
+
+
+
+
+
+
