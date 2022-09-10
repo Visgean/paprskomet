@@ -48,8 +48,7 @@ impl Tuple {
     }
 
     pub fn magnitude(&self) -> f64 {
-        (self.x.powi(2) + self.y.powi(2) + self.z.powi(2))
-            .sqrt()
+        (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
     }
 
     pub fn normalize(&self) -> Self {
@@ -67,10 +66,7 @@ impl Tuple {
         //     panic!("Cant dot point to point!")
         // }
 
-        self.x * rhs.x
-            + self.y * rhs.y
-            + self.z * rhs.z
-            + self.w * rhs.w
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z + self.w * rhs.w
     }
 
     fn cross(&self, rhs: &Self) -> Self {
@@ -146,12 +142,7 @@ impl Mul<Tuple> for f64 {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Tuple::new(
-            self * rhs.x,
-            self * rhs.y,
-            self * rhs.z,
-            rhs.w,
-        )
+        Tuple::new(self * rhs.x, self * rhs.y, self * rhs.z, rhs.w)
     }
 }
 
@@ -163,12 +154,7 @@ impl Mul<f64> for Tuple {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Tuple::new(
-            self.x * rhs,
-            self.y * rhs,
-            self.z * rhs,
-            self.w,
-        )
+        Tuple::new(self.x * rhs, self.y * rhs, self.z * rhs, self.w)
     }
 }
 
@@ -180,12 +166,7 @@ impl Div<f64> for Tuple {
             panic!("Cant use scalar multiplication on a point!!")
         }
 
-        Tuple::new(
-            self.x / rhs,
-            self.y / rhs,
-            self.z / rhs,
-            self.w,
-        )
+        Tuple::new(self.x / rhs, self.y / rhs, self.z / rhs, self.w)
     }
 }
 
@@ -300,10 +281,7 @@ mod tests {
     fn test_magnitude() {
         let vector_a = Tuple::vector(3.0, 6.0, 9.0);
 
-        assert!(float_compare(
-            vector_a.magnitude(),
-            11.224972
-        ));
+        assert!(float_compare(vector_a.magnitude(), 11.224972));
     }
 
     #[test]

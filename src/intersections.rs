@@ -6,40 +6,35 @@ pub struct Intersection {
     pub t: f64,
 }
 
-
 pub fn hit(ints: Vec<Intersection>) -> Option<Intersection> {
-    let mut ints_filtered: Vec<Intersection> = ints.iter().cloned().filter(
-        | &i| i.t >= 0.
-    ).collect();
+    let mut ints_filtered: Vec<Intersection> =
+        ints.iter().cloned().filter(|&i| i.t >= 0.).collect();
 
-    ints_filtered.sort_by(| a, b| a.t.partial_cmp(&b.t).unwrap());
+    ints_filtered.sort_by(|a, b| a.t.partial_cmp(&b.t).unwrap());
     ints_filtered.first().copied()
 }
-
-
 
 #[cfg(test)]
 mod tests {
     use crate::intersections::{hit, Intersection};
-    use uuid::Uuid;
     use crate::utils::float_compare;
-
+    use uuid::Uuid;
 
     #[test]
     fn test_hit_filter() {
         let uid = Uuid::new_v4();
         let before = vec![
-            Intersection{
+            Intersection {
                 object_id: uid,
-                t: 5.0
+                t: 5.0,
             },
-            Intersection{
+            Intersection {
                 object_id: uid,
-                t: 2.0
+                t: 2.0,
             },
-            Intersection{
+            Intersection {
                 object_id: uid,
-                t: -1.0
+                t: -1.0,
             },
         ];
 

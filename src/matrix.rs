@@ -92,8 +92,7 @@ impl M {
     }
 
     pub fn transpose(&self) -> M {
-        let mut result =
-            M::empty_matrix(self.rows, self.columns);
+        let mut result = M::empty_matrix(self.rows, self.columns);
 
         for i in 0..self.rows {
             for j in 0..self.columns {
@@ -155,8 +154,7 @@ impl M {
             panic!("Cant invert non-invertible matrix!!");
         }
 
-        let mut r =
-            M::empty_matrix(self.rows, self.columns);
+        let mut r = M::empty_matrix(self.rows, self.columns);
 
         for row in 0..self.rows {
             for col in 0..self.columns {
@@ -171,17 +169,14 @@ impl M {
 
 impl PartialEq for M {
     fn eq(&self, other: &Self) -> bool {
-        if !(self.columns == other.columns
-            && self.rows == other.rows)
-        {
+        if !(self.columns == other.columns && self.rows == other.rows) {
             return false;
         }
 
         let flat_self = self.data.iter().flatten();
         let flat_other = other.data.iter().flatten();
 
-        zip(flat_self, flat_other)
-            .all(|(a, b)| float_compare(*a, *b))
+        zip(flat_self, flat_other).all(|(a, b)| float_compare(*a, *b))
     }
 }
 
@@ -202,8 +197,28 @@ impl Mul<M> for M {
             let row_vector = self.row(row);
 
             for col in 0..columns {
-                let x =
-                    dot_p(&row_vector, &rhs.column(col));
+                let x = dot_p(&row_vector, &rhs.column(col));
+                result.set(row, col, x);
+            }
+        }
+        result
+    }
+}
+
+impl Mul<&M> for &M {
+    type Output = M;
+
+    fn mul(self, rhs: &M) -> Self::Output {
+        let rows = self.rows;
+        let columns = rhs.columns;
+
+        let mut result = M::empty_matrix(rows, columns);
+
+        for row in 0..rows {
+            let row_vector = self.row(row);
+
+            for col in 0..columns {
+                let x = dot_p(&row_vector, &rhs.column(col));
                 result.set(row, col, x);
             }
         }
@@ -217,22 +232,29 @@ impl Mul<Tuple> for M {
     fn mul(self, rhs: Tuple) -> Self::Output {
         // convert vector to one column matrix..
 
-        let m_v = M::new(vec![
-            vec![rhs.x],
-            vec![rhs.y],
-            vec![rhs.z],
-            vec![rhs.w],
-        ])
-        .unwrap();
+        let m_v =
+            M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]])
+                .unwrap();
 
         let r = self * m_v;
 
-        Tuple::new(
-            r.get(0, 0),
-            r.get(1, 0),
-            r.get(2, 0),
-            r.get(3, 0),
-        )
+        Tuple::new(r.get(0, 0), r.get(1, 0), r.get(2, 0), r.get(3, 0))
+    }
+}
+
+impl Mul<Tuple> for &M {
+    type Output = Tuple;
+
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        // convert vector to one column matrix..
+
+        let m_v =
+            M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]])
+                .unwrap();
+
+        let r = self * &m_v;
+
+        Tuple::new(r.get(0, 0), r.get(1, 0), r.get(2, 0), r.get(3, 0))
     }
 }
 
@@ -374,7 +396,7 @@ mod tests {
         ])
         .unwrap();
 
-        let m2 = m1.clone() * M::ident(4);
+        let m2 = &m1 * &M::ident(4);
 
         assert_eq!(m2, m1)
     }
@@ -402,9 +424,7 @@ mod tests {
 
     #[test]
     fn test_small_det() {
-        let m1 =
-            M::new(vec![vec![1.0, 5.0], vec![-3.0, 2.0]])
-                .unwrap();
+        let m1 = M::new(vec![vec![1.0, 5.0], vec![-3.0, 2.0]]).unwrap();
 
         assert_eq!(m1.det(), 17.0);
     }
@@ -457,9 +477,7 @@ mod tests {
         ])
         .unwrap();
 
-        let subm =
-            M::new(vec![vec![1.0, 4.0], vec![0.0, 1.0]])
-                .unwrap();
+        let subm = M::new(vec![vec![1.0, 4.0], vec![0.0, 1.0]]).unwrap();
         assert_eq!(m1.submatrix(1, 1), subm);
     }
 
@@ -647,7 +665,7 @@ mod tests {
             vec![6.0, -2.0, 0.0, 5.0],
         ])
         .unwrap();
-        let c = m_a.clone() * m_b.clone();
+        let c = &m_a * &m_b;
         assert_eq!(m_a, c * m_b.inverse());
     }
 
@@ -661,7 +679,7 @@ mod tests {
         ])
         .unwrap();
 
-        let c = m_a.clone() * m_a.inverse();
+        let c = &m_a * &m_a.inverse();
         assert_eq!(c, M::ident(4));
     }
 }

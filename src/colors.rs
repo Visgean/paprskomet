@@ -49,8 +49,7 @@ impl Color {
     }
 
     pub fn magnitude(&self) -> f64 {
-        (self.r.powi(2) + self.g.powi(2) + self.b.powi(2))
-            .sqrt()
+        (self.r.powi(2) + self.g.powi(2) + self.b.powi(2)).sqrt()
     }
 
     pub fn normalize(&self) -> Self {
@@ -69,9 +68,7 @@ impl Color {
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
-        self.r == other.r
-            && self.g == other.g
-            && self.b == other.b
+        self.r == other.r && self.g == other.g && self.b == other.b
     }
 }
 
@@ -79,11 +76,7 @@ impl Add for Color {
     type Output = Color;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Color::new(
-            self.r + rhs.r,
-            self.g + rhs.g,
-            self.b + rhs.b,
-        )
+        Color::new(self.r + rhs.r, self.g + rhs.g, self.b + rhs.b)
     }
 }
 
@@ -91,11 +84,7 @@ impl Sub for Color {
     type Output = Color;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        Color::new(
-            self.r - rhs.r,
-            self.g - rhs.g,
-            self.b - rhs.b,
-        )
+        Color::new(self.r - rhs.r, self.g - rhs.g, self.b - rhs.b)
     }
 }
 
@@ -103,11 +92,7 @@ impl Mul<Color> for f64 {
     type Output = Color;
 
     fn mul(self, rhs: Color) -> Self::Output {
-        Color::new(
-            self * rhs.r,
-            self * rhs.g,
-            self * rhs.b,
-        )
+        Color::new(self * rhs.r, self * rhs.g, self * rhs.b)
     }
 }
 
@@ -115,11 +100,7 @@ impl Mul<f64> for Color {
     type Output = Color;
 
     fn mul(self, rhs: f64) -> Self::Output {
-        Color::new(
-            self.r * rhs,
-            self.g * rhs,
-            self.b * rhs,
-        )
+        Color::new(self.r * rhs, self.g * rhs, self.b * rhs)
     }
 }
 
@@ -127,11 +108,7 @@ impl Div<f64> for Color {
     type Output = Color;
 
     fn div(self, rhs: f64) -> Self::Output {
-        Color::new(
-            self.r / rhs,
-            self.g / rhs,
-            self.b / rhs,
-        )
+        Color::new(self.r / rhs, self.g / rhs, self.b / rhs)
     }
 }
 
@@ -139,11 +116,7 @@ impl Mul<Color> for Color {
     type Output = Color;
 
     fn mul(self, rhs: Color) -> Self::Output {
-        Color::new(
-            self.r * rhs.r,
-            self.g * rhs.g,
-            self.b * rhs.b,
-        )
+        Color::new(self.r * rhs.r, self.g * rhs.g, self.b * rhs.b)
     }
 }
 
@@ -206,10 +179,7 @@ mod tests {
     #[test]
     fn test_magnitude() {
         let color_a = Color::new(3.0, 6.0, 9.0);
-        assert!(float_compare(
-            color_a.magnitude(),
-            11.224972
-        ));
+        assert!(float_compare(color_a.magnitude(), 11.224972));
     }
 
     #[test]

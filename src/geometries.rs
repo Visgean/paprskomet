@@ -1,8 +1,8 @@
+use crate::intersections::Intersection;
+use crate::matrix::M;
 use crate::ray::Ray;
 use crate::vectors::Tuple;
 use uuid::Uuid;
-use crate::intersections::Intersection;
-use crate::matrix::M;
 
 pub struct Sphere {
     pub id: Uuid,
@@ -12,7 +12,6 @@ pub struct Sphere {
 
 impl Sphere {
     pub fn new() -> Sphere {
-
         Sphere {
             id: Uuid::new_v4(),
             transform: M::ident(4),
@@ -26,15 +25,13 @@ impl Sphere {
     }
 
     fn transformed_ray(&self, ray: Ray) -> Ray {
-        ray.transform(self.transform_inv.clone())
+        ray.transform(&self.transform_inv)
     }
-
 
     pub fn intersects(&self, ray_original: Ray) -> Vec<Intersection> {
         let ray = self.transformed_ray(ray_original);
 
-        let sphere_to_ray =
-            ray.origin - Tuple::point(0., 0., 0.);
+        let sphere_to_ray = ray.origin - Tuple::point(0., 0., 0.);
         let a = ray.direction.dot(&ray.direction);
         let b = 2. * ray.direction.dot(&sphere_to_ray);
         let c = sphere_to_ray.dot(&sphere_to_ray) - 1.;
@@ -69,10 +66,7 @@ mod tests {
 
     #[test]
     fn test_intersection_1() {
-        let r = Ray::new(
-            Tuple::point(0., 0., -5.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(0., 0., -5.), Tuple::vector(0., 0., 1.));
 
         let sph = Sphere::new();
         let ints = sph.intersects(r);
@@ -85,10 +79,7 @@ mod tests {
 
     #[test]
     fn test_intersection_2() {
-        let r = Ray::new(
-            Tuple::point(0., 1., -5.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(0., 1., -5.), Tuple::vector(0., 0., 1.));
 
         let sph = Sphere::new();
         let ints = sph.intersects(r);
@@ -101,10 +92,7 @@ mod tests {
 
     #[test]
     fn test_intersection_miss() {
-        let r = Ray::new(
-            Tuple::point(0., 2., -5.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(0., 2., -5.), Tuple::vector(0., 0., 1.));
 
         let sph = Sphere::new();
         let ints = sph.intersects(r);
@@ -114,10 +102,7 @@ mod tests {
 
     #[test]
     fn test_intersection_inside() {
-        let r = Ray::new(
-            Tuple::point(0., 0., 0.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(0., 0., 0.), Tuple::vector(0., 0., 1.));
 
         let sph = Sphere::new();
         let ints = sph.intersects(r);
@@ -130,10 +115,7 @@ mod tests {
 
     #[test]
     fn test_intersection_behind() {
-        let r = Ray::new(
-            Tuple::point(0., 0., 5.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(0., 0., 5.), Tuple::vector(0., 0., 1.));
 
         let sph = Sphere::new();
         let ints = sph.intersects(r);
@@ -146,17 +128,10 @@ mod tests {
 
     #[test]
     fn test_point_calc() {
-        let r = Ray::new(
-            Tuple::point(1., 1., 1.),
-            Tuple::vector(0., 0., 1.),
-        );
+        let r = Ray::new(Tuple::point(1., 1., 1.), Tuple::vector(0., 0., 1.));
 
-        let sphere_to_ray =
-            r.origin - Tuple::point(0., 0., 0.);
+        let sphere_to_ray = r.origin - Tuple::point(0., 0., 0.);
 
-        assert_eq!(
-            sphere_to_ray,
-            Tuple::vector(1., 1., 1.)
-        )
+        assert_eq!(sphere_to_ray, Tuple::vector(1., 1., 1.))
     }
 }
