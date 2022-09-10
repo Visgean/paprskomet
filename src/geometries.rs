@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 pub struct Sphere {
     pub id: Uuid,
-    pub transform: M,
-    pub transform_inv: M,
+    transform: M,
+    transform_inv: M,
 }
 
 impl Sphere {
