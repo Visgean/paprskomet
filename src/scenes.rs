@@ -64,7 +64,9 @@ pub fn ball_above() {
     let mut canvas = Canvas::new(100, 100);
 
     let mut ball = Sphere::new();
-    ball.transform = translation(100., 100., 0.) * scaling(40., 90., 0.1);
+    ball.set_transform(
+        translation(100., 100., 0.) * scaling(40., 90., 0.1)
+    );
 
     for y in 0..canvas.height {
         for x in 0..canvas.width {
@@ -78,7 +80,8 @@ pub fn ball_above() {
 
             match hit {
                 None => {}
-                Some(_) => canvas.write(x, y, Color::red()),
+                Some(_) => {
+                    canvas.write(x, y, Color::red()) },
             }
         }
     }
