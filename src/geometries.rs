@@ -7,6 +7,7 @@ use crate::matrix::M;
 pub struct Sphere {
     pub id: Uuid,
     pub transform: M,
+    pub transform_inv: M,
 }
 
 impl Sphere {
@@ -15,11 +16,17 @@ impl Sphere {
         Sphere {
             id: Uuid::new_v4(),
             transform: M::ident(4),
+            transform_inv: M::ident(4),
         }
     }
 
+    pub fn set_transform(&mut self, m: M) {
+        self.transform = m.clone();
+        self.transform_inv = m.inverse();
+    }
+
     fn transformed_ray(&self, ray: Ray) -> Ray {
-        ray.transform(self.transform.inverse())
+        ray.transform(self.transform_inv.clone())
     }
 
 
