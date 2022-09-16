@@ -10,7 +10,7 @@ mod utils;
 pub mod vectors;
 
 fn main() {
-    scenes::write_projectile_image();
-    scenes::clock();
+    // scenes::write_projectile_image();
+    // scenes::clock();
     scenes::ball_above();
 }

@@ -8,6 +8,7 @@ pub struct Sphere {
     pub id: Uuid,
     transform: M,
     transform_inv: M,
+    transform_inv_t: M
 }
 
 impl Sphere {
@@ -16,12 +17,14 @@ impl Sphere {
             id: Uuid::new_v4(),
             transform: M::ident(4),
             transform_inv: M::ident(4),
+            transform_inv_t: M::ident(4),
         }
     }
 
     pub fn set_transform(&mut self, m: M) {
         self.transform = m.clone();
         self.transform_inv = m.inverse();
+        self.transform_inv_t = m.inverse().transpose();
     }
 
     fn transformed_ray(&self, ray: Ray) -> Ray {
@@ -55,14 +58,24 @@ impl Sphere {
             },
         ]
     }
+
+    pub fn normal(&self, p: Tuple) -> Tuple {
+        let ob_point = &self.transform_inv * p;
+        let ob_normal = ob_point - Tuple::point(0., 0., 0.);
+        let mut world_normal = &self.transform_inv_t * ob_normal;
+        world_normal.w = 0.;
+        world_normal.normalize()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::geometries::Sphere;
     use crate::ray::Ray;
+    use crate::transformations::translation;
     use crate::utils::float_compare;
     use crate::vectors::Tuple;
+    use std::f64::consts::FRAC_1_SQRT_2;
 
     #[test]
     fn test_intersection_1() {
@@ -133,5 +146,42 @@ mod tests {
         let sphere_to_ray = r.origin - Tuple::point(0., 0., 0.);
 
         assert_eq!(sphere_to_ray, Tuple::vector(1., 1., 1.))
+    }
+
+    #[test]
+    fn test_normals() {
+        let sph = Sphere::new();
+
+        assert_eq!(
+            sph.normal(Tuple::point(1., 0., 0.)),
+            Tuple::vector(1., 0., 0.)
+        );
+
+        assert_eq!(
+            sph.normal(Tuple::point(0., 1., 0.)),
+            Tuple::vector(0., 1., 0.)
+        );
+
+        assert_eq!(
+            sph.normal(Tuple::point(0., 0., 1.)),
+            Tuple::vector(0., 0., 1.)
+        );
+
+        // nonaxical point:
+        let t: f64 = (3_f64).sqrt() / 3.;
+
+        assert_eq!(sph.normal(Tuple::point(t, t, t)), Tuple::vector(t, t, t));
+    }
+
+    #[test]
+    fn test_normals_translated() {
+        let mut sph = Sphere::new();
+
+        sph.set_transform(translation(0., 1., 0.));
+
+        assert_eq!(
+            sph.normal(Tuple::point(0., 1. + FRAC_1_SQRT_2, -FRAC_1_SQRT_2)),
+            Tuple::vector(0., FRAC_1_SQRT_2, -FRAC_1_SQRT_2)
+        );
     }
 }
