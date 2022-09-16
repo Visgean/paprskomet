@@ -8,7 +8,7 @@ pub struct Sphere {
     pub id: Uuid,
     transform: M,
     transform_inv: M,
-    transform_inv_t: M
+    transform_inv_t: M,
 }
 
 impl Sphere {
