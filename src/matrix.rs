@@ -26,9 +26,7 @@ impl M {
         }
 
         if columns > 4 || rows > 4 {
-            return Err(
-                "Right now only 4x4 matrices are supported, sorry!".into()
-            );
+            return Err("Right now only 4x4 matrices are supported, sorry!".into());
         }
 
         for row in &data {
@@ -37,11 +35,7 @@ impl M {
             }
         }
 
-        Ok(M {
-            data,
-            columns,
-            rows,
-        })
+        Ok(M { data, columns, rows })
     }
 
     pub fn empty_matrix(m: usize, n: usize) -> M {
@@ -106,8 +100,7 @@ impl M {
         // base case:
 
         if self.columns == 2 && self.rows == 2 {
-            return self.get(0, 0) * self.get(1, 1)
-                - self.get(0, 1) * self.get(1, 0);
+            return self.get(0, 0) * self.get(1, 1) - self.get(0, 1) * self.get(1, 0);
         }
 
         let mut det = 0.0;
@@ -232,9 +225,7 @@ impl Mul<Tuple> for M {
     fn mul(self, rhs: Tuple) -> Self::Output {
         // convert vector to one column matrix..
 
-        let m_v =
-            M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]])
-                .unwrap();
+        let m_v = M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]]).unwrap();
 
         let r = self * m_v;
 
@@ -248,9 +239,7 @@ impl Mul<Tuple> for &M {
     fn mul(self, rhs: Tuple) -> Self::Output {
         // convert vector to one column matrix..
 
-        let m_v =
-            M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]])
-                .unwrap();
+        let m_v = M::new(vec![vec![rhs.x], vec![rhs.y], vec![rhs.z], vec![rhs.w]]).unwrap();
 
         let r = self * &m_v;
 
@@ -279,12 +268,7 @@ mod tests {
 
     #[test]
     fn test_matrix_3x3_init() {
-        let m1 = M::new(vec![
-            vec![1.0, 2.0, 3.0],
-            vec![5.5, 6.5, 7.5],
-            vec![9.0, 10.0, 11.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![1.0, 2.0, 3.0], vec![5.5, 6.5, 7.5], vec![9.0, 10.0, 11.0]]).unwrap();
         assert_eq!(m1.rows, 3);
         assert_eq!(m1.columns, 3);
         assert_eq!(m1.get(1, 2), 7.5)
@@ -303,26 +287,11 @@ mod tests {
 
     #[test]
     fn test_matrix_compare() {
-        let m1 = M::new(vec![
-            vec![1.0, 2.0, 3.0],
-            vec![5.5, 6.5, 7.5],
-            vec![9.0, 10.0, 11.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![1.0, 2.0, 3.0], vec![5.5, 6.5, 7.5], vec![9.0, 10.0, 11.0]]).unwrap();
 
-        let m2 = M::new(vec![
-            vec![1.0, 2.0, 3.0],
-            vec![5.5, 6.5, 7.5],
-            vec![9.0, 10.0, 11.0],
-        ])
-        .unwrap();
+        let m2 = M::new(vec![vec![1.0, 2.0, 3.0], vec![5.5, 6.5, 7.5], vec![9.0, 10.0, 11.0]]).unwrap();
 
-        let m3 = M::new(vec![
-            vec![2.0, 2.0, 3.0],
-            vec![5.5, 6.5, 7.5],
-            vec![9.0, 10.0, 11.0],
-        ])
-        .unwrap();
+        let m3 = M::new(vec![vec![2.0, 2.0, 3.0], vec![5.5, 6.5, 7.5], vec![9.0, 10.0, 11.0]]).unwrap();
 
         assert_eq!(m1, m2);
         assert_ne!(m1, m3);
@@ -439,12 +408,7 @@ mod tests {
         ])
         .unwrap();
 
-        let subm = M::new(vec![
-            vec![4.0, 4.0, 2.0],
-            vec![6.0, 4.0, 1.0],
-            vec![0.0, 0.0, 1.0],
-        ])
-        .unwrap();
+        let subm = M::new(vec![vec![4.0, 4.0, 2.0], vec![6.0, 4.0, 1.0], vec![0.0, 0.0, 1.0]]).unwrap();
 
         assert_eq!(m1.submatrix(0, 0), subm);
     }
@@ -459,23 +423,13 @@ mod tests {
         ])
         .unwrap();
 
-        let subm = M::new(vec![
-            vec![1.0, 3.0, 4.0],
-            vec![8.0, 4.0, 1.0],
-            vec![0.0, 0.0, 1.0],
-        ])
-        .unwrap();
+        let subm = M::new(vec![vec![1.0, 3.0, 4.0], vec![8.0, 4.0, 1.0], vec![0.0, 0.0, 1.0]]).unwrap();
         assert_eq!(m1.submatrix(1, 1), subm);
     }
 
     #[test]
     fn test_submatrix_3() {
-        let m1 = M::new(vec![
-            vec![1.0, 3.0, 4.0],
-            vec![8.0, 4.0, 1.0],
-            vec![0.0, 0.0, 1.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![1.0, 3.0, 4.0], vec![8.0, 4.0, 1.0], vec![0.0, 0.0, 1.0]]).unwrap();
 
         let subm = M::new(vec![vec![1.0, 4.0], vec![0.0, 1.0]]).unwrap();
         assert_eq!(m1.submatrix(1, 1), subm);
@@ -483,24 +437,14 @@ mod tests {
 
     #[test]
     fn test_minor() {
-        let m1 = M::new(vec![
-            vec![3.0, 5.0, 0.0],
-            vec![2.0, -1.0, -7.0],
-            vec![6.0, -1.0, 5.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![3.0, 5.0, 0.0], vec![2.0, -1.0, -7.0], vec![6.0, -1.0, 5.0]]).unwrap();
 
         assert_eq!(m1.minor(1, 0), 25.0);
     }
 
     #[test]
     fn test_cofactor() {
-        let m1 = M::new(vec![
-            vec![3.0, 5.0, 0.0],
-            vec![2.0, -1.0, -7.0],
-            vec![6.0, -1.0, 5.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![3.0, 5.0, 0.0], vec![2.0, -1.0, -7.0], vec![6.0, -1.0, 5.0]]).unwrap();
 
         assert_eq!(m1.minor(0, 0), -12.0);
         assert_eq!(m1.cofactor(0, 0), -12.0);
@@ -512,12 +456,7 @@ mod tests {
 
     #[test]
     fn test_det_3x3() {
-        let m1 = M::new(vec![
-            vec![1.0, 2.0, 6.0],
-            vec![-5.0, 8.0, -4.0],
-            vec![2.0, 6.0, 4.0],
-        ])
-        .unwrap();
+        let m1 = M::new(vec![vec![1.0, 2.0, 6.0], vec![-5.0, 8.0, -4.0], vec![2.0, 6.0, 4.0]]).unwrap();
 
         assert_eq!(m1.cofactor(0, 0), 56.0);
         assert_eq!(m1.cofactor(0, 1), 12.0);

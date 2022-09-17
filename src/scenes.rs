@@ -6,9 +6,7 @@ use crate::colors::Color;
 use crate::geometries::Sphere;
 use crate::intersections::hit;
 use crate::ray::Ray;
-use crate::transformations::{
-    rotation_x, rotation_y, rotation_z, scaling, translation,
-};
+use crate::transformations::{rotation_x, rotation_y, rotation_z, scaling, translation};
 
 pub fn write_projectile_image() {
     let mut canvas = Canvas::new(1200, 800);
@@ -71,10 +69,7 @@ pub fn ball_above() {
             let xf = x as f64;
             let yf = y as f64;
 
-            let hit = hit(ball.intersects(Ray::new(
-                Tuple::point(xf, yf, 10.),
-                Tuple::vector(xf, yf, -10.),
-            )));
+            let hit = hit(ball.intersects(Ray::new(Tuple::point(xf, yf, 10.), Tuple::vector(xf, yf, -10.))));
 
             match hit {
                 None => {}

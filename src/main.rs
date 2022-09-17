@@ -2,6 +2,8 @@ mod canvas;
 pub mod colors;
 mod geometries;
 mod intersections;
+mod lights;
+mod materials;
 mod matrix;
 mod ray;
 mod scenes;
