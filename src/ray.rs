@@ -48,7 +48,8 @@ mod tests {
     fn test_translation() {
         let r1 = Ray::new(Tuple::point(1., 2., 3.), Tuple::vector(0., 1., 0.));
 
-        let r1_result = Ray::new(Tuple::point(4., 6., 8.), Tuple::vector(0., 1., 0.));
+        let r1_result =
+            Ray::new(Tuple::point(4., 6., 8.), Tuple::vector(0., 1., 0.));
 
         let r1_t = r1.transform(&translation(5., 5., 5.));
     }
@@ -57,7 +58,8 @@ mod tests {
     fn test_scaling() {
         let r1 = Ray::new(Tuple::point(1., 2., 3.), Tuple::vector(0., 1., 0.));
 
-        let r1_result = Ray::new(Tuple::point(2., 6., 12.), Tuple::vector(0., 3., 0.));
+        let r1_result =
+            Ray::new(Tuple::point(2., 6., 12.), Tuple::vector(0., 3., 0.));
 
         let r1_t = r1.transform(&scaling(2., 3., 4.));
     }

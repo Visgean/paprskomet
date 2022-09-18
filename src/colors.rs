@@ -25,15 +25,28 @@ impl Color {
     }
 
     pub fn black() -> Self {
-        Self { r: 0.0, g: 0.0, b: 0.0 }
+        Self {
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn red() -> Self {
-        Self { r: 1.0, g: 0.0, b: 0.0 }
+        Self {
+            r: 1.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn to_str(&self) -> String {
-        format!("{} {} {}\n", f_pixel(self.r), f_pixel(self.g), f_pixel(self.b))
+        format!(
+            "{} {} {}\n",
+            f_pixel(self.r),
+            f_pixel(self.g),
+            f_pixel(self.b)
+        )
     }
 
     pub fn magnitude(&self) -> f64 {
@@ -56,7 +69,9 @@ impl Color {
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
-        float_compare(self.r, other.r) && float_compare(self.g, other.g) && float_compare(self.b, other.b)
+        float_compare(self.r, other.r)
+            && float_compare(self.g, other.g)
+            && float_compare(self.b, other.b)
     }
 }
 

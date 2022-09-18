@@ -14,5 +14,6 @@ pub mod vectors;
 fn main() {
     // scenes::write_projectile_image();
     // scenes::clock();
-    scenes::ball_above();
+    // scenes::ball_above();
+    scenes::ball_lightning();
 }

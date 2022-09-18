@@ -7,7 +7,13 @@ pub struct PointLight {
     pub position: Tuple,
 }
 
-pub fn lighting(m: Material, light: PointLight, position: Tuple, eye: Tuple, normal: Tuple) -> Color {
+pub fn lighting(
+    m: Material,
+    light: &PointLight,
+    position: Tuple,
+    eye: Tuple,
+    normal: Tuple,
+) -> Color {
     let effective_color = m.color * light.intensity;
 
     let lightv = (light.position - position).normalize();
@@ -23,7 +29,9 @@ pub fn lighting(m: Material, light: PointLight, position: Tuple, eye: Tuple, nor
         let reflect_dot_eye = reflectv.dot(&eye);
 
         if reflect_dot_eye > 0. {
-            specular = light.intensity * m.specular * (reflect_dot_eye.powf(m.shininess))
+            specular = light.intensity
+                * m.specular
+                * (reflect_dot_eye.powf(m.shininess))
         }
     }
     ambient + diffuse + specular
@@ -47,7 +55,7 @@ mod tests {
             position: Tuple::point(0., 0., -10.),
         };
 
-        let r = lighting(m, light, position, eyev, normal);
+        let r = lighting(m, &light, position, eyev, normal);
         assert_eq!(r, Color::new(1.9, 1.9, 1.9))
     }
 
@@ -64,7 +72,7 @@ mod tests {
             position: Tuple::point(0., 0., -10.),
         };
 
-        let r = lighting(m, light, position, eyev, normal);
+        let r = lighting(m, &light, position, eyev, normal);
         assert_eq!(r, Color::new(1.0, 1.0, 1.0))
     }
 
@@ -79,7 +87,7 @@ mod tests {
             position: Tuple::point(0., 10., -10.),
         };
 
-        let r = lighting(m, light, position, eyev, normal);
+        let r = lighting(m, &light, position, eyev, normal);
         assert_eq!(r, Color::new(0.7364, 0.7364, 0.7364))
     }
 
@@ -96,7 +104,7 @@ mod tests {
             position: Tuple::point(0., 10., -10.),
         };
 
-        let r = lighting(m, light, position, eyev, normal);
+        let r = lighting(m, &light, position, eyev, normal);
         assert_eq!(r, Color::new(1.6364, 1.6364, 1.6364))
     }
 
@@ -112,7 +120,7 @@ mod tests {
             position: Tuple::point(0., 0., 10.),
         };
 
-        let r = lighting(m, light, position, eyev, normal);
+        let r = lighting(m, &light, position, eyev, normal);
         assert_eq!(r, Color::new(0.1, 0.1, 0.1))
     }
 }

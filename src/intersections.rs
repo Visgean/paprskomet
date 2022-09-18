@@ -7,7 +7,8 @@ pub struct Intersection {
 }
 
 pub fn hit(ints: Vec<Intersection>) -> Option<Intersection> {
-    let mut ints_filtered: Vec<Intersection> = ints.iter().cloned().filter(|&i| i.t >= 0.).collect();
+    let mut ints_filtered: Vec<Intersection> =
+        ints.iter().cloned().filter(|&i| i.t >= 0.).collect();
 
     ints_filtered.sort_by(|a, b| a.t.partial_cmp(&b.t).unwrap());
     ints_filtered.first().copied()
@@ -23,8 +24,14 @@ mod tests {
     fn test_hit_filter() {
         let uid = Uuid::new_v4();
         let before = vec![
-            Intersection { object_id: uid, t: 5.0 },
-            Intersection { object_id: uid, t: 2.0 },
+            Intersection {
+                object_id: uid,
+                t: 5.0,
+            },
+            Intersection {
+                object_id: uid,
+                t: 2.0,
+            },
             Intersection {
                 object_id: uid,
                 t: -1.0,

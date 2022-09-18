@@ -1,5 +1,6 @@
 use crate::colors::Color;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Material {
     pub color: Color,
     pub ambient: f64,

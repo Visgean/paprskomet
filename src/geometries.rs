@@ -156,11 +156,20 @@ mod tests {
     fn test_normals() {
         let sph = Sphere::new();
 
-        assert_eq!(sph.normal(Tuple::point(1., 0., 0.)), Tuple::vector(1., 0., 0.));
+        assert_eq!(
+            sph.normal(Tuple::point(1., 0., 0.)),
+            Tuple::vector(1., 0., 0.)
+        );
 
-        assert_eq!(sph.normal(Tuple::point(0., 1., 0.)), Tuple::vector(0., 1., 0.));
+        assert_eq!(
+            sph.normal(Tuple::point(0., 1., 0.)),
+            Tuple::vector(0., 1., 0.)
+        );
 
-        assert_eq!(sph.normal(Tuple::point(0., 0., 1.)), Tuple::vector(0., 0., 1.));
+        assert_eq!(
+            sph.normal(Tuple::point(0., 0., 1.)),
+            Tuple::vector(0., 0., 1.)
+        );
 
         // nonaxical point:
         let t: f64 = (3_f64).sqrt() / 3.;

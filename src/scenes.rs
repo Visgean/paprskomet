@@ -5,8 +5,11 @@ use crate::canvas::Canvas;
 use crate::colors::Color;
 use crate::geometries::Sphere;
 use crate::intersections::hit;
+use crate::lights::{lighting, PointLight};
 use crate::ray::Ray;
-use crate::transformations::{rotation_x, rotation_y, rotation_z, scaling, translation};
+use crate::transformations::{
+    rotation_x, rotation_y, rotation_z, scaling, translation,
+};
 
 pub fn write_projectile_image() {
     let mut canvas = Canvas::new(1200, 800);
@@ -69,7 +72,10 @@ pub fn ball_above() {
             let xf = x as f64;
             let yf = y as f64;
 
-            let hit = hit(ball.intersects(Ray::new(Tuple::point(xf, yf, 10.), Tuple::vector(xf, yf, -10.))));
+            let hit = hit(ball.intersects(Ray::new(
+                Tuple::point(xf, yf, 10.),
+                Tuple::vector(xf, yf, -10.),
+            )));
 
             match hit {
                 None => {}
@@ -78,4 +84,53 @@ pub fn ball_above() {
         }
     }
     canvas.write_ppm("./ball-above.ppm");
+}
+
+pub fn ball_lightning() {
+    let mut canvas = Canvas::new(1000, 1000);
+
+    let mut ball = Sphere::new();
+    ball.material.color = Color::new(1., 0.2, 1.);
+    ball.material.diffuse = 1.6;
+    ball.material.ambient = 0.;
+
+    ball.set_transform(translation(800., 800., 0.) * scaling(500., 500., 0.1));
+
+    let eye_position = Tuple::point(100., 100., 15.);
+    let light = PointLight {
+        intensity: Color::new(1., 1., 1.),
+        position: Tuple::point(100., 100., -500.),
+    };
+
+    for y in 0..canvas.height {
+        for x in 0..canvas.width {
+            let xf = x as f64;
+            let yf = y as f64;
+
+            let ray = Tuple::vector(xf, yf, -10.).normalize();
+
+            let hit = hit(ball.intersects(Ray::new(eye_position, ray)));
+
+            match hit {
+                None => {}
+                Some(i) => {
+                    let mut position = ray * i.t;
+                    position.w = 1.;
+
+                    let normal = ball.normal(position);
+
+                    let r = lighting(
+                        ball.material,
+                        &light,
+                        position,
+                        -ray,
+                        normal,
+                    );
+
+                    canvas.write(x, y, r)
+                }
+            }
+        }
+    }
+    canvas.write_ppm("./ball-light.ppm");
 }

@@ -12,13 +12,22 @@ pub struct Tuple {
 
 impl fmt::Display for Tuple {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({:.2}, {:.2}, {:.2}, {:.2})", self.x, self.y, self.z, self.w)
+        write!(
+            f,
+            "({:.2}, {:.2}, {:.2}, {:.2})",
+            self.x, self.y, self.z, self.w
+        )
     }
 }
 
 impl Tuple {
     pub fn new(x: f64, y: f64, z: f64, w: f64) -> Self {
-        Self { x: x, y: y, z: z, w: w }
+        Self {
+            x: x,
+            y: y,
+            z: z,
+            w: w,
+        }
     }
 
     pub fn point(x: f64, y: f64, z: f64) -> Self {
@@ -95,7 +104,12 @@ impl Add for Tuple {
             panic!("Cant add point to point!")
         }
 
-        Tuple::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z, self.w + rhs.w)
+        Tuple::new(
+            self.x + rhs.x,
+            self.y + rhs.y,
+            self.z + rhs.z,
+            self.w + rhs.w,
+        )
     }
 }
 
@@ -107,7 +121,12 @@ impl Sub for Tuple {
         //     panic!("Cant add point to point!")
         // }
 
-        Tuple::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z, self.w - rhs.w)
+        Tuple::new(
+            self.x - rhs.x,
+            self.y - rhs.y,
+            self.z - rhs.z,
+            self.w - rhs.w,
+        )
     }
 }
 
@@ -115,7 +134,12 @@ impl Sub for &Tuple {
     type Output = Tuple;
 
     fn sub(self, rhs: Self) -> Self::Output {
-        Tuple::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z, self.w - rhs.w)
+        Tuple::new(
+            self.x - rhs.x,
+            self.y - rhs.y,
+            self.z - rhs.z,
+            self.w - rhs.w,
+        )
     }
 }
 
