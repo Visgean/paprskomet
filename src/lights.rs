@@ -10,16 +10,16 @@ pub struct PointLight {
 pub fn lighting(m: Material, light: PointLight, position: Tuple, eye: Tuple, normal: Tuple) -> Color {
     let effective_color = m.color * light.intensity;
 
-    let lightv = light.position - position;
+    let lightv = (light.position - position).normalize();
     let ambient = effective_color * m.ambient;
     let mut diffuse = Color::black();
     let mut specular = Color::black();
 
     let light_dot_normal = lightv.dot(&normal);
-    if light_dot_normal > 0. {
+    if light_dot_normal >= 0. {
         diffuse = effective_color * m.diffuse * light_dot_normal;
 
-        let reflectv =  (-lightv).reflect(&normal);
+        let reflectv = (-lightv).reflect(&normal);
         let reflect_dot_eye = reflectv.dot(&eye);
 
         if reflect_dot_eye > 0. {

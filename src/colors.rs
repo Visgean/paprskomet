@@ -1,3 +1,4 @@
+use crate::utils::float_compare;
 use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, Clone, Copy)]
@@ -55,7 +56,7 @@ impl Color {
 
 impl PartialEq for Color {
     fn eq(&self, other: &Self) -> bool {
-        self.r == other.r && self.g == other.g && self.b == other.b
+        float_compare(self.r, other.r) && float_compare(self.g, other.g) && float_compare(self.b, other.b)
     }
 }
 

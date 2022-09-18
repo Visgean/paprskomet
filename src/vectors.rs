@@ -74,11 +74,8 @@ impl Tuple {
     }
 
     pub fn reflect(&self, normal: &Self) -> Tuple {
-        (self - normal) * 2. * self.dot(normal)
+        self - &((*normal) * 2. * self.dot(normal))
     }
-
-
-
 }
 
 impl PartialEq for Tuple {
@@ -118,7 +115,6 @@ impl Sub for &Tuple {
     type Output = Tuple;
 
     fn sub(self, rhs: Self) -> Self::Output {
-
         Tuple::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z, self.w - rhs.w)
     }
 }
@@ -300,5 +296,13 @@ mod tests {
         let vector_b = Tuple::vector(2.0, 3.0, 4.0);
         let vector_c = Tuple::vector(-1.0, 2.0, -1.0);
         assert_eq!(vector_a.cross(&vector_b), vector_c);
+    }
+
+    #[test]
+    fn test_reflect() {
+        let v1 = Tuple::vector(1., -1., 0.);
+        let n = Tuple::vector(0., 1., 0.);
+
+        assert_eq!(v1.reflect(&n), Tuple::vector(1., 1., 0.))
     }
 }

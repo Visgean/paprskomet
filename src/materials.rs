@@ -11,7 +11,7 @@ pub struct Material {
 impl Material {
     pub fn default() -> Material {
         Material {
-            color: Color::red(),
+            color: Color::new(1., 1., 1.),
             ambient: 0.1,
             diffuse: 0.9,
             specular: 0.9,
